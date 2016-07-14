@@ -37,19 +37,23 @@ namespace TrollRAT
         protected bool running = false;
         public bool Running => running;
 
-        private PayloadSettingNumber delay = new PayloadSettingNumber(100, "Delay (in 1/100 seconds)", 1, 10000, 1);
+        private PayloadSettingNumber delay;
         public decimal Delay => delay.Value;
 
         protected int i;
 
-        public LoopingPayload()
+        public LoopingPayload(int defaultDelay)
         {
+            delay = new PayloadSettingNumber(defaultDelay, "Delay (in 1/100 seconds)", 1, 10000, 1);
+
             settings.Add(delay);
             actions.Add(PayloadActions.payloadActionStartStop);
 
             var thread = new Thread(new ThreadStart(Loop));
             thread.Start();
         }
+
+        public LoopingPayload() : this(100) { }
 
         public void Start()
         {

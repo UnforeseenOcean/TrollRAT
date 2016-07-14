@@ -6,7 +6,8 @@ using System.IO;
 
 namespace TrollRAT
 {
-    public abstract class PayloadSetting {
+    public abstract class PayloadSetting
+    {
         private static int idCounter = 0;
 
         protected int id;
@@ -21,7 +22,7 @@ namespace TrollRAT
         public abstract void readData(string str);
     }
 
-   public abstract class PayloadSetting<t> : PayloadSetting
+    public abstract class PayloadSetting<t> : PayloadSetting
     {
         protected t value;
         public t Value => value;
@@ -71,6 +72,29 @@ namespace TrollRAT
             {
                 value = decimal.Parse(str);
             } catch (Exception) { }
+        }
+    }
+
+    public class PayloadSettingString : TitledPayloadSetting<string>
+    {
+        protected decimal min, max, step;
+        public decimal Min => min;
+        public decimal Max => max;
+        public decimal Step => step;
+
+        public PayloadSettingString(string defaultValue, string title) : base(defaultValue, title) { }
+
+        public override void writeHTML(StringBuilder builder)
+        {
+            builder.Append(String.Format("<div class=\"form-group\"><label for=\"id{1}\">{0}</label><input id=\"id{1}\" " +
+                "class=\"form-control\" type=\"text\" value=\"{2}\" " +
+                "oninput=\"setSetting({1}, this.value);\"></input></div>",
+                title, id, value));
+        }
+
+        public override void readData(string str)
+        {
+            value = str;
         }
     }
 }
