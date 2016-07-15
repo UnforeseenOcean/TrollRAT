@@ -22,7 +22,7 @@ namespace TrollRAT
         
         public Payload()
         {
-            actions.Add(PayloadActions.payloadActionExecute);
+            actions.Add(new PayloadActionExecute());
         }
 
         public void Execute()
@@ -47,7 +47,7 @@ namespace TrollRAT
             delay = new PayloadSettingNumber(defaultDelay, "Delay (in 1/100 seconds)", 1, 10000, 1);
 
             settings.Add(delay);
-            actions.Add(PayloadActions.payloadActionStartStop);
+            actions.Add(new PayloadActionStartStop());
 
             var thread = new Thread(new ThreadStart(Loop));
             thread.Start();

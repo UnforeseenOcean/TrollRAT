@@ -25,9 +25,9 @@ namespace TrollRAT
 
         // Returns the JavaScript that should be used for the button
         // in order to trigger its server routine
-        public string getExecuteJavascript(string selector)
+        public string getExecuteJavascript()
         {
-            return String.Format("execute({0}, {1});", id, selector);
+            return String.Format("execute({0});", id);
         }
     }
 
@@ -42,13 +42,13 @@ namespace TrollRAT
 
             return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-default btn-xs\">" +
                 "<span class=\"glyphicon glyphicon-{1}\" aria-hidden=\"true\"></span></button> ",
-                getExecuteJavascript("$('#payloads').children().index($(this).parent().parent())"), icon);
+                getExecuteJavascript(), icon);
         }
 
         public override string getSettingsButton(Payload payload)
         {
             return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-default btn-xl\">" +
-               "{1}</button> ", getExecuteJavascript("$('#payloads').children().index($('#payloads .active'))"), getTitle(payload));
+               "{1}</button> ", getExecuteJavascript(), getTitle(payload));
         }
 
         public abstract string getTitle(Payload payload);
@@ -112,9 +112,9 @@ namespace TrollRAT
         }
     }
 
-    public class PayloadActions
+    /*public class PayloadActions
     {
         public static readonly PayloadActionExecute payloadActionExecute = new PayloadActionExecute();
         public static readonly PayloadActionStartStop payloadActionStartStop = new PayloadActionStartStop();
-    }
+    }*/
 }

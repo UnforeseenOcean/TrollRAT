@@ -77,7 +77,7 @@
                 $("#actions").html(actions);
             }).error(function () {
                 $("#actions").html("<p>Something went wrong :(</p>");
-            });;
+            });
 
             $.ajax({
                 method: "GET",
@@ -90,14 +90,14 @@
             });
         }
 
-        function execute(id, payload) {
+        function execute(id) {
             block = true;
             window.setTimeout(function () { block = false }, 100);
 
             $.ajax({
                 method: "GET",
                 url: "/execute",
-                data: {"id": id, "payload": payload}
+                data: {"id": id}
             }).done(function (js) {
                 eval(js);
             }).error(function () {

