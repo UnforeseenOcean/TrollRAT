@@ -1,0 +1,34 @@
+These are planned and already finished features for this project.
+If I got new ideas, I will add them here. If you got a good idea, open an Issue or even a Pull Request.
+
+ - Web GUI
+    - [x] Simple and functional Web GUI
+    - [ ] Savable presets and panic function
+    - [ ] Multi-User support (auto update)
+    - [ ] Upload support
+    - [ ] Search function
+ - API
+    - [x] Basic API for Payloads, Actions and Settings
+    - [ ] Support for random Payload Delays
+    - [ ] Plugin support
+    - [ ] More pre-defined settings classes
+ - Coding
+    - [ ] Clean up and optimize whole code
+    - [ ] More error handlers
+    - [ ] Split server commands into multiple classes
+    - [ ] Firewall support
+    - [ ] Include native DLL in binary
+    - [ ] Add startup messages (Disclaimer, quick tutorial etc.)
+ - Payloads
+    - [x] Simple payloads from MEMZ
+        - [ ] Ability to change MessageBox text
+    - [ ] Restore function for MessageBoxes and visual payloads
+    - [x] Open Program/Website
+    - [ ] Melting Screen
+    - [ ] Crash PC
+    - [ ] Earthquake (Shaking Screen)
+    - [ ] Shaking Windows
+    - [ ] Show/Hide Windows
+    - [ ] Crash single Program
+    - [ ] Draw uploaded Images
+    - [ ] Play uploaded Sounds
