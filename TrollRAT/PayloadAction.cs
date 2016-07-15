@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace TrollRAT
@@ -112,9 +113,33 @@ namespace TrollRAT
         }
     }
 
-    /*public class PayloadActions
+    public class PayloadActionClearScreen : SimplePayloadAction
     {
-        public static readonly PayloadActionExecute payloadActionExecute = new PayloadActionExecute();
-        public static readonly PayloadActionStartStop payloadActionStartStop = new PayloadActionStartStop();
-    }*/
+        [DllImport("user32.dll")]
+        static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, int flags);
+
+        public override string execute(Payload payload)
+        {
+            RedrawWindow(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 133);
+            return "void(0);";
+        }
+
+        public override string getIcon(Payload payload) { return null; }
+        public override string getTitle(Payload payload) { return "Clear Screen"; }
+    }
+
+    public class PayloadActionClearWindows : SimplePayloadAction
+    {
+        [DllImport("TrollRATNative.dll")]
+        static extern void clearWindows();
+
+        public override string execute(Payload payload)
+        {
+            clearWindows();
+            return "void(0);";
+        }
+
+        public override string getIcon(Payload payload) { return null; }
+        public override string getTitle(Payload payload) { return "Close open Windows"; }
+    }
 }

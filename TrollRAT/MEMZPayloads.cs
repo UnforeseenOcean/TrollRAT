@@ -23,6 +23,8 @@ namespace TrollRAT
 
             settings.Add(text);
             settings.Add(label);
+
+            actions.Add(new PayloadActionClearWindows());
         }
 
         protected override void execute()
@@ -41,7 +43,11 @@ namespace TrollRAT
         [DllImport("TrollRATNative.dll")]
         public static extern void payloadGlitch();
 
-        public PayloadGlitch() : base(20) { name = "Screen Glitches"; }
+        public PayloadGlitch() : base(20)
+        {
+            actions.Add(new PayloadActionClearScreen());
+            name = "Screen Glitches";
+        }
 
         protected override void execute()
         {
@@ -77,7 +83,11 @@ namespace TrollRAT
         [DllImport("TrollRATNative.dll")]
         public static extern void payloadTunnel();
 
-        public PayloadTunnel() : base(20) { name = "Tunnel Effect"; }
+        public PayloadTunnel() : base(20)
+        {
+            actions.Add(new PayloadActionClearScreen());
+            name = "Tunnel Effect";
+        }
 
         protected override void execute()
         {
@@ -103,7 +113,11 @@ namespace TrollRAT
         [DllImport("TrollRATNative.dll")]
         public static extern void payloadDrawErrors();
 
-        public PayloadDrawErrors() : base(2) { name = "Draw Errors"; }
+        public PayloadDrawErrors() : base(2)
+        {
+            actions.Add(new PayloadActionClearScreen());
+            name = "Draw Errors";
+        }
 
         protected override void execute()
         {
@@ -116,7 +130,11 @@ namespace TrollRAT
         [DllImport("TrollRATNative.dll")]
         public static extern void payloadInvertScreen();
 
-        public PayloadInvertScreen() { name = "Invert Screen"; }
+        public PayloadInvertScreen()
+        {
+            actions.Add(new PayloadActionClearScreen());
+            name = "Invert Screen";
+        }
 
         protected override void execute()
         {

