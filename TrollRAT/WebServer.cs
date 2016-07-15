@@ -43,7 +43,7 @@ namespace TrollRAT
                         StringBuilder content = new StringBuilder();
                         foreach (Payload payload in payloads)
                         {
-                            content.Append("<a href=\"#\" onclick=\"getSettings(this);\" class=\"list-group-item clearfix\">");
+                            content.Append("<a href=\"#\" onclick=\"onPayloadSelected(this);\" class=\"list-group-item clearfix\">");
                             content.Append(payload.Name);
                             content.Append("<span class=\"pull-right\">");
 
@@ -150,15 +150,23 @@ namespace TrollRAT
                     else if (context.Request.Url.AbsolutePath == "/settings")
                     {
                         // TODO Error handling
-                        int i = Int32.Parse(HttpUtility.ParseQueryString(context.Request.Url.Query).Get("index"));
-                        Payload payload = payloads[i];
-
+                        int pl = Int32.Parse(HttpUtility.ParseQueryString(context.Request.Url.Query).Get("index"));
                         StringBuilder content = new StringBuilder();
-                        foreach (PayloadSetting setting in payload.Settings)
-                        {
-                            setting.writeHTML(content);
-                        }
 
+                        if (pl >= 0 && pl < Payloads.Count)
+                        {
+                            Payload payload = payloads[pl];
+
+                            foreach (PayloadSetting setting in payload.Settings)
+                            {
+                                setting.writeHTML(content);
+                            }
+                        }
+                        else
+                        {
+                            content.Append("<p>Please select something.</p>");
+                        }
+                        
                         byte[] data = Encoding.UTF8.GetBytes(content.ToString());
                         if (content.Length < 1)
                         {

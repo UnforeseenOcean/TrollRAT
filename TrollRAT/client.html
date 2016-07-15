@@ -43,13 +43,11 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container" id="content">
         <div class="row">
             <div class="col-md-4">
                 <h3>Payloads</h3>
-                <div class="list-group" id="payloads">
-
-                </div>
+                <div class="list-group" id="payloads"></div>
             </div>
 
             <div class="col-md-8">
@@ -65,28 +63,86 @@
     <script type="text/javascript">
         block = false;
 
+        oldpayloads = "";
+        oldactions = "";
+
+        function showError(msg) {
+            $("#error").remove();
+
+            var alert = $('<div class="alert alert-danger alert-dismissable" id="error" role="alert"></div>');
+            alert.append($('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'));
+            alert.append(msg);
+            alert.prependTo($("#content"));
+        }
+
         function update() {
             var active = $("#payloads").children().index($("#payloads .active"));
-            $("#actions").html("<p>Loading actions...</p>");
+            
+            loadPayloads(active);
+            loadActions(active);
 
+            if ($("#settings").find($(":focus")).size() == 0)
+                loadSettings(active);
+        }
+
+        function onPayloadSelected(obj) {
+            if (block)
+                return;
+            
+            var i = $("#payloads").children().index($(obj));
+
+            $("#payloads > .list-group-item").each(function () {
+                $(this).removeClass("active");
+            });
+
+            $(obj).addClass("active");
+
+            loadActions(i);
+            loadSettings(i);
+        }
+
+        function loadActions(active) {
             $.ajax({
                 method: "GET",
                 url: "/actions",
-                data: {"payload": active}
+                data: { "payload": active }
             }).done(function (actions) {
-                $("#actions").html(actions);
+                if (actions != oldactions) {
+                    $("#actions").html(actions);
+                    oldactions = actions;
+                }
             }).error(function () {
-                $("#actions").html("<p>Something went wrong :(</p>");
+                showError("Server communication failed!");
             });
+        }
 
+        function loadSettings(active) {
+            $.ajax({
+                method: "GET",
+                url: "/settings",
+                data: { index: active }
+            }).done(function (settings) {
+                $("#settings").html(settings);
+            }).error(function () {
+                showError("Server communication failed!");
+            });
+        }
+
+        function loadPayloads(active) {
             $.ajax({
                 method: "GET",
                 url: "/payloads",
             }).done(function (payloads) {
-                $("#payloads").html(payloads);
+                if (payloads != oldpayloads) {
+                    $("#payloads").html(payloads);
 
-                if (active != -1)
-                    $("#payloads").children().eq(active).addClass("active");
+                    if (active != -1)
+                        $("#payloads").children().eq(active).addClass("active");
+
+                    oldpayloads = payloads;
+                }
+            }).error(function () {
+                showError("Server communication failed!");
             });
         }
 
@@ -101,7 +157,7 @@
             }).done(function (js) {
                 eval(js);
             }).error(function () {
-                alert("Server communication failed :(");
+                showError("Server communication failed!");
             });
         }
 
@@ -111,36 +167,12 @@
                 url: "/set",
                 data: { "id": id, "value": value }
             }).error(function () {
-                alert("Server communication failed :(");
-            });
-        }
-
-        function getSettings(obj) {
-            if (block)
-                return;
-
-            var i = $("#payloads").children().index($(obj));
-
-            $("#payloads > .list-group-item").each(function() {
-                $(this).removeClass("active");
-            })
-
-            $("#settings").html("<p>Loading settings...</p>");
-
-            $.ajax({
-                method: "GET",
-                url: "/settings",
-                data: {index: i}
-            }).done(function (settings) {
-                $(obj).addClass("active");
-                $("#settings").html(settings);
-                update();
-            }).error(function() {
-                $("#settings").html("<p>Something went wrong :(</p>");
+                showError("Server communication failed!");
             });
         }
 
         update();
+        window.setInterval(update, 1000);
     </script>
 </body>
 </html>
