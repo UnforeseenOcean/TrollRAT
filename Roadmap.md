@@ -21,7 +21,8 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [ ] Add startup messages (Disclaimer, quick tutorial etc.)
  - Payloads
     - [x] Simple payloads from MEMZ
-        - [ ] Ability to change MessageBox text
+        - [x] Ability to change MessageBox text
+		- [ ] Ability to change MessageBox icon
     - [ ] Restore function for MessageBoxes and visual payloads
     - [x] Open Program/Website
     - [ ] Melting Screen
