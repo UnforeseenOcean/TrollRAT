@@ -72,7 +72,6 @@
     <Compile Include="MEMZPayloads.cs" />
     <Compile Include="SimplePayloads.cs" />
     <Compile Include="WebServer.cs" />
-    <Compile Include="WinAPI.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
