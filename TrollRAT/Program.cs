@@ -25,6 +25,7 @@ namespace TrollRAT
             server.Payloads.Add(new PayloadInvertScreen());
 
             server.Payloads.Add(new PayloadEarthquake());
+            server.Payloads.Add(new PayloadMeltingScreen());
 
             server.run();
         }

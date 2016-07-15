@@ -26,7 +26,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
 		- [ ] Ability to change MessageBox icon
     - [x] Restore function for MessageBoxes and visual payloads
     - [x] Open Program/Website
-    - [ ] Melting Screen
+    - [x] Melting Screen
     - [ ] Crash PC
     - [x] Earthquake (Shaking Screen)
     - [ ] Shaking Windows

@@ -23,4 +23,27 @@ namespace TrollRAT
             payloadEarthquake((int)Delay, (int)power.Value);
         }
     }
+
+    public class PayloadMeltingScreen : LoopingPayload
+    {
+        [DllImport("TrollRATNative.dll")]
+        public static extern void payloadMeltingScreen(int size, int power);
+
+        private PayloadSettingNumber size = new PayloadSettingNumber(30, "Bar Size", 2, 200, 1);
+        private PayloadSettingNumber power = new PayloadSettingNumber(3, "Power", 1, 40, 1);
+
+        public PayloadMeltingScreen() : base(4)
+        {
+            actions.Add(new PayloadActionClearScreen());
+            settings.Add(size);
+            settings.Add(power);
+
+            name = "Melting Screen";
+        }
+
+        protected override void execute()
+        {
+            payloadMeltingScreen((int)size.Value, (int)power.Value);
+        }
+    }
 }
