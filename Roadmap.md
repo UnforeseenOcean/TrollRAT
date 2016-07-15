@@ -19,6 +19,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Firewall support
     - [ ] Include native DLL in binary
     - [ ] Add startup messages (Disclaimer, quick tutorial etc.)
+	- [ ] Better timing handling
  - Payloads
     - [x] Simple payloads from MEMZ
         - [x] Ability to change MessageBox text
@@ -27,7 +28,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Open Program/Website
     - [ ] Melting Screen
     - [ ] Crash PC
-    - [ ] Earthquake (Shaking Screen)
+    - [x] Earthquake (Shaking Screen)
     - [ ] Shaking Windows
     - [ ] Show/Hide Windows
     - [ ] Crash single Program
