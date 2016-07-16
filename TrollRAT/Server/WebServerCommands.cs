@@ -79,7 +79,15 @@ namespace TrollRAT.Server
             {
                 plugins.Append(plugin.Name + ", ");
             }
-            respondString(plugins.ToString(0, plugins.Length - 2), context.Response, "text/html");
+
+            if (plugins.Length < 3)
+            {
+                respondString("None", context.Response, "text/html");
+            }
+            else
+            {
+                respondString(plugins.ToString(0, plugins.Length - 2), context.Response, "text/html");
+            }
         }
     }
 }
