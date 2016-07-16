@@ -1,190 +1,190 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+	<meta charset="utf-8" />
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <style type="text/css">
-        body {
-            padding-top: 70px;
-        }
-    </style>
+	<style type="text/css">
+		body {
+			padding-top: 70px;
+		}
+	</style>
 
-    <title>TrollRAT</title>
+	<title>TrollRAT</title>
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">TrollRAT</a>
-            </div>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">TrollRAT</a>
+			</div>
 
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="nav navbar-nav">
-                    <li><button class="btn btn-default navbar-btn" onclick="about();">About</button></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+			<div class="collapse navbar-collapse" id="navbar">
+				<ul class="nav navbar-nav">
+					<li><button class="btn btn-default navbar-btn" onclick="about();">About</button></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-    <div class="container" id="content">
-        <div class="row">
-            <div class="col-md-4">
-                <h3>Payloads</h3>
-                <div class="list-group" id="payloads"></div>
-            </div>
+	<div class="container" id="content">
+		<div class="row">
+			<div class="col-md-4">
+				<h3>Payloads</h3>
+				<div class="list-group" id="payloads"></div>
+			</div>
 
-            <div class="col-md-8">
-                <h3>Settings</h3>
-                <div id="settings"></div>
+			<div class="col-md-8">
+				<h3>Settings</h3>
+				<div id="settings"></div>
 
-                <h3>Actions</h3>
-                <div id="actions"></div>
-            </div>
-        </div>
+				<h3>Actions</h3>
+				<div id="actions"></div>
+			</div>
+		</div>
 
-        <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">About TrollRAT</h4>
-                    </div>
-                    <div class="modal-body" id="about"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">About TrollRAT</h4>
+					</div>
+					<div class="modal-body" id="about"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <script type="text/javascript">
-        block = false;
+	<script type="text/javascript">
+		block = false;
 
-        oldpayloads = "";
-        oldactions = "";
+		oldpayloads = "";
+		oldactions = "";
 
-        function showError(msg) {
-            $("#error").remove();
+		function showError(msg) {
+			$("#error").remove();
 
-            var alert = $('<div class="alert alert-danger alert-dismissable" id="error" role="alert"></div>');
-            alert.append($('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'));
-            alert.append(msg);
-            alert.prependTo($("#content"));
-        }
+			var alert = $('<div class="alert alert-danger alert-dismissable" id="error" role="alert"></div>');
+			alert.append($('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'));
+			alert.append(msg);
+			alert.prependTo($("#content"));
+		}
 
-        function update() {
-            var active = $("#payloads").children().index($("#payloads .active"));
-            
-            loadPayloads(active);
-            loadActions(active);
+		function update() {
+			var active = $("#payloads").children().index($("#payloads .active"));
+			
+			loadPayloads(active);
+			loadActions(active);
 
-            if ($("#settings").find($(":focus")).size() == 0)
-                loadSettings(active);
-        }
+			if ($("#settings").find($(":focus")).size() == 0)
+				loadSettings(active);
+		}
 
-        function onPayloadSelected(obj) {
-            if (block)
-                return;
-            
-            var i = $("#payloads").children().index($(obj));
+		function onPayloadSelected(obj) {
+			if (block)
+				return;
+			
+			var i = $("#payloads").children().index($(obj));
 
-            $("#payloads > .list-group-item").each(function () {
-                $(this).removeClass("active");
-            });
+			$("#payloads > .list-group-item").each(function () {
+				$(this).removeClass("active");
+			});
 
-            $(obj).addClass("active");
+			$(obj).addClass("active");
 
-            loadActions(i);
-            loadSettings(i);
-        }
+			loadActions(i);
+			loadSettings(i);
+		}
 
-        function loadActions(active) {
-            $.ajax({
-                method: "GET",
-                url: "/actions",
-                data: { "payload": active }
-            }).done(function (actions) {
-                if (actions != oldactions) {
-                    $("#actions").html(actions);
-                    oldactions = actions;
-                }
-            }).error(function () {
-                showError("Server communication failed!");
-            });
-        }
+		function loadActions(active) {
+			$.ajax({
+				method: "GET",
+				url: "/actions",
+				data: { "payload": active }
+			}).done(function (actions) {
+				if (actions != oldactions) {
+					$("#actions").html(actions);
+					oldactions = actions;
+				}
+			}).error(function () {
+				showError("Server communication failed!");
+			});
+		}
 
-        function loadSettings(active) {
-            $.ajax({
-                method: "GET",
-                url: "/settings",
-                data: { "payload": active }
-            }).done(function (settings) {
-                $("#settings").html(settings);
-            }).error(function () {
-                showError("Server communication failed!");
-            });
-        }
+		function loadSettings(active) {
+			$.ajax({
+				method: "GET",
+				url: "/settings",
+				data: { "payload": active }
+			}).done(function (settings) {
+				$("#settings").html(settings);
+			}).error(function () {
+				showError("Server communication failed!");
+			});
+		}
 
-        function loadPayloads(active) {
-            $.ajax({
-                method: "GET",
-                url: "/payloads",
-            }).done(function (payloads) {
-                if (payloads != oldpayloads) {
-                    $("#payloads").html(payloads);
+		function loadPayloads(active) {
+			$.ajax({
+				method: "GET",
+				url: "/payloads",
+			}).done(function (payloads) {
+				if (payloads != oldpayloads) {
+					$("#payloads").html(payloads);
 
-                    if (active != -1)
-                        $("#payloads").children().eq(active).addClass("active");
+					if (active != -1)
+						$("#payloads").children().eq(active).addClass("active");
 
-                    oldpayloads = payloads;
-                }
-            }).error(function () {
-                showError("Server communication failed!");
-            });
-        }
+					oldpayloads = payloads;
+				}
+			}).error(function () {
+				showError("Server communication failed!");
+			});
+		}
 
-        function about() {
-            $.ajax({
-                method: "GET",
-                url: "/about",
-            }).done(function (about) {
-                $("#about").html(about);
-                $("#aboutModal").modal();
-            }).error(function () {
-                showError("Server communication failed!");
-            });
-        }
+		function about() {
+			$.ajax({
+				method: "GET",
+				url: "/about",
+			}).done(function (about) {
+				$("#about").html(about);
+				$("#aboutModal").modal();
+			}).error(function () {
+				showError("Server communication failed!");
+			});
+		}
 
-        function execute(id) {
-            block = true;
-            window.setTimeout(function () { block = false }, 100);
+		function execute(id) {
+			block = true;
+			window.setTimeout(function () { block = false }, 100);
 
-            $.ajax({
-                method: "GET",
-                url: "/execute",
-                data: {"id": id}
-            }).done(function (js) {
-                eval(js);
-            }).error(function () {
-                showError("Server communication failed!");
-            });
-        }
+			$.ajax({
+				method: "GET",
+				url: "/execute",
+				data: {"id": id}
+			}).done(function (js) {
+				eval(js);
+			}).error(function () {
+				showError("Server communication failed!");
+			});
+		}
 
 		function setSetting(id, value) {
 			$.ajax({
@@ -200,21 +200,21 @@
 		ci = 0;
 
 		$("body").keyup(function (e) {
-	        if (e.keyCode == code[ci]) {
-		        ci++;
-		        if (ci >= code.length) {
-		            $("#about").html("<p><strong>Greetings to all GAiA Members!</strong></p> \
-                        <p>Currently justquant, Toxoid_49b, CliftonM, xal0gic and Me (Leurak)</p>");
-		            $("#aboutModal").modal();
-		            ci = 0;
-                }
-	        } else {
-	            ci = 0;
-            }
+			if (e.keyCode == code[ci]) {
+				ci++;
+				if (ci >= code.length) {
+					$("#about").html("<p><strong>Greetings to all GAiA Members!</strong></p> \
+						<p>Currently justquant, Toxoid_49b, CliftonM, xal0gic and Me (Leurak)</p>");
+					$("#aboutModal").modal();
+					ci = 0;
+				}
+			} else {
+				ci = 0;
+			}
 		});
 
-        update();
-        window.setInterval(update, 1000);
-    </script>
+		update();
+		window.setInterval(update, 1000);
+	</script>
 </body>
 </html>
