@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
@@ -65,19 +66,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Firewall.cs" />
-    <Compile Include="IDBase.cs" />
-    <Compile Include="NewPayloads.cs" />
-    <Compile Include="Payload.cs" />
-    <Compile Include="PayloadAction.cs" />
-    <Compile Include="PayloadSetting.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Utils\Firewall.cs" />
+    <Compile Include="Utils\IDBase.cs" />
+    <Compile Include="Payloads\Payload.cs" />
+    <Compile Include="Payloads\PayloadAction.cs" />
+    <Compile Include="Payloads\PayloadSetting.cs" />
+    <Compile Include="Plugins\PluginManager.cs" />
+    <Compile Include="Plugins\ITrollRATPlugin.cs" />
+    <Compile Include="TrollRAT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MEMZPayloads.cs" />
     <Compile Include="Server\ActionCommands.cs" />
     <Compile Include="Server\DetailCommands.cs" />
     <Compile Include="Server\WebServerCommands.cs" />
-    <Compile Include="SimplePayloads.cs" />
     <Compile Include="Server\WebServer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -112,12 +112,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="client.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TrollRATNative\TrollRATNative.vcxproj">
-      <Project>{1cbd0582-81fe-4145-a51a-16ff96eb8b34}</Project>
-      <Name>TrollRATNative</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace TrollRAT
+using TrollRAT.Payloads;
+using TrollRATActions;
+
+namespace TrollRATPayloads.Payloads
 {
     public class PayloadEarthquake : LoopingPayload
     {
-        [DllImport("TrollRATNative.dll")]
+        [DllImport("Plugins\\TrollRATNative.dll")]
         public static extern void payloadEarthquake(int delay, int power);
 
         private PayloadSettingNumber power = new PayloadSettingNumber(20, "Movement Factor", 2, 60, 1);
@@ -26,7 +29,7 @@ namespace TrollRAT
 
     public class PayloadMeltingScreen : LoopingPayload
     {
-        [DllImport("TrollRATNative.dll")]
+        [DllImport("Plugins\\TrollRATNative.dll")]
         public static extern void payloadMeltingScreen(int size, int power);
 
         private PayloadSettingNumber size = new PayloadSettingNumber(30, "Bar Size", 2, 200, 1);

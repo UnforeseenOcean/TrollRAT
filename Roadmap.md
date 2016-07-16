@@ -10,14 +10,11 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
  - API
     - [x] Basic API for Payloads, Actions and Settings
     - [ ] Support for random Payload Delays
-    - [ ] Plugin support
+    - [x] Plugin support
     - [ ] More pre-defined settings classes
  - Coding
-    - [ ] Clean up and optimize whole code
-    - [ ] More error handlers
     - [x] Split server commands into multiple classes
     - [x] Firewall support
-    - [ ] Include native DLL in binary
     - [ ] Add startup messages (Disclaimer, quick tutorial etc.)
 	- [ ] Ability to change port
 	- [ ] Better timing handling

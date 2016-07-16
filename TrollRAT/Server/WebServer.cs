@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
-using System.Reflection;
-using System.Web;
 using System.Text.RegularExpressions;
+
+using TrollRAT.Payloads;
+using TrollRAT.Utils;
 
 namespace TrollRAT.Server
 {
@@ -99,6 +100,7 @@ namespace TrollRAT.Server
 
             commands.Add(new RootCommand());
             commands.Add(new PayloadsCommand(payloads));
+            commands.Add(new PluginsCommand());
 
             commands.Add(new SettingsCommand(payloads));
             commands.Add(new ActionsCommand(payloads));

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace TrollRAT
+namespace TrollRAT.Payloads
 {
     public abstract class Payload
     {

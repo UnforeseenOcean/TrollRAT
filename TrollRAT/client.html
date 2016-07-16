@@ -57,6 +57,10 @@
                 <div id="actions"></div>
             </div>
         </div>
+
+        <div class="well well-sm">
+            <strong>Loaded Plugins: </strong><span id="plugins"></span>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -77,6 +81,7 @@
         function update() {
             var active = $("#payloads").children().index($("#payloads .active"));
             
+            loadPlugins();
             loadPayloads(active);
             loadActions(active);
 
@@ -140,6 +145,17 @@
 
                     oldpayloads = payloads;
                 }
+            }).error(function () {
+                showError("Server communication failed!");
+            });
+        }
+
+        function loadPlugins() {
+            $.ajax({
+                method: "GET",
+                url: "/plugins",
+            }).done(function (plugins) {
+                $("#plugins").html(plugins);
             }).error(function () {
                 showError("Server communication failed!");
             });

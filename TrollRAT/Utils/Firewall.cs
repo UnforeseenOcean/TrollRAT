@@ -2,7 +2,7 @@
 
 using NetFwTypeLib;
 
-namespace TrollRAT
+namespace TrollRAT.Utils
 {
     class Firewall
     {

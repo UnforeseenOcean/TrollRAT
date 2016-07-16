@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text;
+using TrollRAT.Utils;
 
-namespace TrollRAT
+namespace TrollRAT.Payloads
 {
     public abstract class PayloadSetting : IDBase<PayloadSetting>
     {
@@ -47,8 +48,8 @@ namespace TrollRAT
 
         public override void writeHTML(StringBuilder builder)
         {
-            builder.Append(String.Format("<div class=\"form-group\"><label for=\"id{5}\">{0}</label><input id=\"id{5}\" " + 
-                "class=\"form-control\" type=\"number\"min=\"{1}\" max=\"{2}\" step=\"{3}\" value=\"{4}\" " + 
+            builder.Append(String.Format("<div class=\"form-group\"><label for=\"id{5}\">{0}</label><input id=\"id{5}\" " +
+                "class=\"form-control\" type=\"number\"min=\"{1}\" max=\"{2}\" step=\"{3}\" value=\"{4}\" " +
                 "oninput=\"setSetting({5}, this.value);\"></input></div>",
                 title, min, max, step, value, id));
         }
@@ -57,8 +58,12 @@ namespace TrollRAT
         {
             try
             {
-                value = decimal.Parse(str);
-            } catch (Exception) { }
+                decimal i = decimal.Parse(str);
+
+                if (i <= max && i >= min)
+                    value = i;
+            }
+            catch (Exception) { }
         }
     }
 

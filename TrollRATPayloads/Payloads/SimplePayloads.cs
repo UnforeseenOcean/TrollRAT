@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace TrollRAT
+using TrollRAT.Payloads;
+
+namespace TrollRATPayloads.Payloads
 {
     public class PayloadOpen : Payload
     {

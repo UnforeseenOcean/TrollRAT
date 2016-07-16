@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 
+using TrollRAT.Payloads;
+
 namespace TrollRAT.Server
 {
     public abstract class DetailCommandBase : WebServerCommand

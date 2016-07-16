@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrollRAT
+namespace TrollRAT.Utils
 {
     public abstract class IDBase
     {

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
+
+using TrollRAT.Payloads;
+using TrollRAT.Plugins;
 
 namespace TrollRAT.Server
 {
@@ -64,6 +65,21 @@ namespace TrollRAT.Server
             }
 
             respondString(response, context.Response, "text/html");
+        }
+    }
+
+    public class PluginsCommand : WebServerCommandBase
+    {
+        public override Regex Path => new Regex("^/plugins$");
+
+        public override void execute(HttpListenerContext context)
+        {
+            StringBuilder plugins = new StringBuilder();
+            foreach (ITrollRATPlugin plugin in TrollRAT.pluginManager.plugins)
+            {
+                plugins.Append(plugin.Name + ", ");
+            }
+            respondString(plugins.ToString(0, plugins.Length - 2), context.Response, "text/html");
         }
     }
 }
