@@ -28,6 +28,7 @@ namespace TrollRATPayloads
 
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadEarthquake());
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadMeltingScreen());
+            TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadTrain());
         }
     }
 }

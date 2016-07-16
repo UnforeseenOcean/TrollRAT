@@ -25,6 +25,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Restore function for MessageBoxes and visual payloads
     - [x] Open Program/Website
     - [x] Melting Screen
+	- [x] Train/Elevator effect
     - [ ] Crash PC
     - [x] Earthquake (Shaking Screen)
     - [ ] Shaking Windows

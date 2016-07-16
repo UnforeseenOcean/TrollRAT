@@ -80,6 +80,29 @@ PAYLOAD payloadTunnel(int scale) {
 	FreeHDCs
 }
 
+PAYLOAD payloadTrain(int xPower, int yPower) {
+	InitHDCs
+
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
+	HDC hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, screenshot);
+
+	// Take screenshot
+	BitBlt(hdc2, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+
+	// Move screen
+	BitBlt(hdc, xPower > 0 ? xPower : 0, yPower > 0 ? yPower : 0, w-abs(xPower), h-abs(yPower), hdc, xPower < 0 ? -xPower : 0, yPower < 0 ? -yPower : 0, SRCCOPY);
+
+	// Restore overlapping part
+	BitBlt(hdc, xPower < 0 ? w + xPower : 0, 0, abs(xPower), h, hdc2, xPower > 0 ? w - xPower : 0, 0, SRCCOPY);
+	BitBlt(hdc, 0, yPower < 0 ? h + yPower : 0, w, abs(yPower), hdc2, 0, yPower > 0 ? h - yPower : 0, SRCCOPY);
+
+	DeleteDC(hdc2);
+	DeleteObject(screenshot);
+
+	FreeHDCs
+}
+
 PAYLOAD payloadDrawErrors() {
 	InitHDCs
 

