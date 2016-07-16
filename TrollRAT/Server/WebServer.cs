@@ -100,7 +100,7 @@ namespace TrollRAT.Server
 
             commands.Add(new RootCommand());
             commands.Add(new PayloadsCommand(payloads));
-            commands.Add(new PluginsCommand());
+            commands.Add(new AboutCommand());
 
             commands.Add(new SettingsCommand(payloads));
             commands.Add(new ActionsCommand(payloads));

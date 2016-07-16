@@ -68,26 +68,32 @@ namespace TrollRAT.Server
         }
     }
 
-    public class PluginsCommand : WebServerCommandBase
+    public class AboutCommand : WebServerCommandBase
     {
-        public override Regex Path => new Regex("^/plugins$");
+        public override Regex Path => new Regex("^/about$");
 
         public override void execute(HttpListenerContext context)
         {
-            StringBuilder plugins = new StringBuilder();
+            StringBuilder about = new StringBuilder();
+
+            Version version = Assembly.GetCallingAssembly().GetName().Version;
+            about.Append(String.Format("<p><strong>TrollRAT {0}.{1}</strong> - Remote Trolling Software by Leurak</p>", version.Major, version.Minor));
+            about.Append("<p><strong>Source Code</strong> is <a href=\"http://github.com/Leurak/TrollRAT\">on GitHub</a>, Licensed under MIT License</p>");
+
+            about.Append("<p><strong>Loaded Plugins: </strong>");
             foreach (ITrollRATPlugin plugin in TrollRAT.pluginManager.plugins)
             {
-                plugins.Append(plugin.Name + ", ");
+                about.Append(plugin.Name + ", ");
             }
 
-            if (plugins.Length < 3)
-            {
-                respondString("None", context.Response, "text/html");
-            }
+            if (TrollRAT.pluginManager.plugins.Length == 0)
+                about.Append("None");
             else
-            {
-                respondString(plugins.ToString(0, plugins.Length - 2), context.Response, "text/html");
-            }
+                about.Remove(about.Length - 2, 2);
+
+            about.Append("</p>");
+
+            respondString(about.ToString(), context.Response, "text/html");
         }
     }
 }

