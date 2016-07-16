@@ -186,15 +186,32 @@
             });
         }
 
-        function setSetting(id, value) {
-            $.ajax({
-                method: "GET",
-                url: "/set",
-                data: { "id": id, "value": value }
-            }).error(function () {
-                showError("Server communication failed!");
-            });
-        }
+		function setSetting(id, value) {
+			$.ajax({
+				method: "GET",
+				url: "/set",
+				data: { "id": id, "value": value }
+			}).error(function () {
+				showError("Server communication failed!");
+			});
+		}
+
+		code = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+		ci = 0;
+
+		$("body").keyup(function (e) {
+	        if (e.keyCode == code[ci]) {
+		        ci++;
+		        if (ci >= code.length) {
+		            $("#about").html("<p><strong>Greetings to all GAiA Members!</strong></p> \
+                        <p>Currently justquant, Toxoid_49b, CliftonM, xal0gic and Me (Leurak)</p>");
+		            $("#aboutModal").modal();
+		            ci = 0;
+                }
+	        } else {
+	            ci = 0;
+            }
+		});
 
         update();
         window.setInterval(update, 1000);
