@@ -32,8 +32,8 @@ namespace TrollRATPayloads.Payloads
         [DllImport("Plugins\\TrollRATNative.dll")]
         public static extern void payloadMeltingScreen(int size, int power);
 
-        private PayloadSettingNumber size = new PayloadSettingNumber(30, "Bar Size", 2, 200, 1);
-        private PayloadSettingNumber power = new PayloadSettingNumber(3, "Power", 1, 40, 1);
+        private PayloadSettingNumber size = new PayloadSettingNumber(30, "Bar Size", 4, 200, 1);
+        private PayloadSettingNumber power = new PayloadSettingNumber(10, "Power", 1, 40, 1);
 
         public PayloadMeltingScreen() : base(4)
         {
