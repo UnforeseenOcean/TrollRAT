@@ -33,4 +33,5 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [ ] Crash single Program
     - [ ] Draw uploaded Images
     - [ ] Play uploaded Sounds
+	- [ ] Text to Speech Output
 	- [ ] Multi-Monitor support for payloads

