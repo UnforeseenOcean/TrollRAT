@@ -19,6 +19,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Firewall support
     - [ ] Include native DLL in binary
     - [ ] Add startup messages (Disclaimer, quick tutorial etc.)
+	- [ ] Ability to change port
 	- [ ] Better timing handling
  - Payloads
     - [x] Simple payloads from MEMZ

@@ -189,9 +189,9 @@ PAYLOAD payloadMeltingScreen(int size, int power) {
 		BitBlt(hdc2, 0, 0, size, h, hdc, x, 0, SRCCOPY);
 
 		for (int j = 0; j < size; j++) {
-			for (int k = 0; k < sin(j / ((float)size)*3.14159)*(size / 4); k++) {
-				BitBlt(hdc2, j, 0, 1, h, hdc2, j, -1, SRCCOPY);
-			}
+			int depth = sin(j / ((float)size)*3.14159)*(size / 4);
+			StretchBlt(hdc2, j, 0, 1, depth, hdc2, j, 0, 1, 1, SRCCOPY);
+			BitBlt(hdc2, j, 0, 1, h, hdc2, j, -depth, SRCCOPY);
 		}
 
 		BitBlt(hdc, x, 0, size, h, hdc2, 0, 0, SRCCOPY);
