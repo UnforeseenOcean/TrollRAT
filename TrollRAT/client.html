@@ -45,6 +45,10 @@
 	</nav>
 
 	<div class="container" id="content">
+        <div class="alert alert-warning" id="noscript" role="alert">
+            <strong>JavaScript is disabled.</strong> This page does not work without JavaScript.
+        </div>
+
 		<div class="row">
 			<div class="col-md-4">
 				<h3>Payloads</h3>
@@ -212,6 +216,8 @@
 				ci = 0;
 			}
 		});
+
+		$("#noscript").remove();
 
 		update();
 		window.setInterval(update, 1000);
