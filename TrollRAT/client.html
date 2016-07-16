@@ -119,7 +119,7 @@
             $.ajax({
                 method: "GET",
                 url: "/settings",
-                data: { index: active }
+                data: { "payload": active }
             }).done(function (settings) {
                 $("#settings").html(settings);
             }).error(function () {

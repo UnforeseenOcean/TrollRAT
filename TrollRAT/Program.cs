@@ -1,5 +1,7 @@
 ﻿using System;
 
+using TrollRAT.Server;
+
 namespace TrollRAT
 {
     static class Program

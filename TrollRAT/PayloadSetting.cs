@@ -3,18 +3,8 @@ using System.Text;
 
 namespace TrollRAT
 {
-    public abstract class PayloadSetting
+    public abstract class PayloadSetting : IDBase<PayloadSetting>
     {
-        private static int idCounter = 0;
-
-        protected int id;
-        public int ID => id;
-
-        public PayloadSetting()
-        {
-            id = idCounter++;
-        }
-
         public abstract void writeHTML(StringBuilder builder);
         public abstract void readData(string str);
     }

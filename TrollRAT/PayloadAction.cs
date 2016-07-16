@@ -3,18 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace TrollRAT
 {
-    public abstract class PayloadAction
+    public abstract class PayloadAction : IDBase<PayloadAction>
     {
-        private static int idCounter = 0;
-
-        protected int id;
-        public int ID => id;
-
-        public PayloadAction()
-        {
-            id = idCounter++;
-        }
-
         public abstract string getListButton(Payload payload);
         public abstract string getSettingsButton(Payload payload);
 
