@@ -80,6 +80,9 @@ PAYLOAD payloadSound(int sound) {
 PAYLOAD payloadGlitch(int maxSize, int power) {
 	InitHDCs
 
+	if (maxSize >= w) maxSize = w - 1;
+	if (maxSize >= h) maxSize = h - 1;
+
 	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
 	HDC hdc2 = CreateCompatibleDC(hdc);
 	SelectObject(hdc2, screenshot);
@@ -108,12 +111,19 @@ PAYLOAD payloadGlitch(int maxSize, int power) {
 
 PAYLOAD payloadTunnel(int scale) {
 	InitHDCs
+
+	if (scale >= w/2) scale = w/2 - 1;
+	if (scale >= h/2) scale = h/2 - 1;
+
 	StretchBlt(hdc, scale, scale, rekt.right - scale*2, rekt.bottom - scale*2, hdc, 0, 0, rekt.right, rekt.bottom, SRCCOPY);
 	FreeHDCs
 }
 
 PAYLOAD payloadTrain(int xPower, int yPower) {
 	InitHDCs
+
+	if (xPower >= w) xPower = w - 1;
+	if (yPower >= h) yPower = h - 1;
 
 	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
 	HDC hdc2 = CreateCompatibleDC(hdc);
@@ -184,6 +194,9 @@ BOOL CALLBACK CleanWindowsProc(HWND hwnd, LPARAM lParam) {
 PAYLOAD payloadEarthquake(int delay, int power) {
 	InitHDCs
 
+	if (power >= w) power = w - 1;
+	if (power >= h) power = h - 1;
+
 	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
 	HDC hdc2 = CreateCompatibleDC(hdc);
 	SelectObject(hdc2, screenshot);
@@ -201,6 +214,8 @@ PAYLOAD payloadEarthquake(int delay, int power) {
 
 PAYLOAD payloadMeltingScreen(int size, int power) {
 	InitHDCs
+
+	if (size >= w) size = w - 1;
 
 	HBITMAP screenshot = CreateCompatibleBitmap(hdc, size, rekt.bottom);
 	HDC hdc2 = CreateCompatibleDC(hdc);
