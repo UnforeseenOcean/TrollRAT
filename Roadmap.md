@@ -8,7 +8,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [ ] Savable presets and panic function
     - [x] Multi-User support (auto update)
     - [ ] Upload support
-    - [ ] Search function
+    - [x] Search function
  - API
     - [x] Basic API for Payloads, Actions and Settings
     - [ ] Support for random Payload Delays
