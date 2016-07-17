@@ -3,6 +3,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
 
  - Web GUI
     - [x] Simple and functional Web GUI
+	- [x] Basic scripting support
     - [ ] Savable presets and panic function
     - [x] Multi-User support (auto update)
     - [ ] Upload support

