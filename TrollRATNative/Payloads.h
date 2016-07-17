@@ -20,5 +20,6 @@ PAYLOAD payloadCursor(int power);
 PAYLOAD payloadEarthquake(int delay, int power);
 PAYLOAD payloadMeltingScreen(int size, int power);
 PAYLOAD payloadTrain(int xPower, int yPower);
+PAYLOAD payloadDrawPixels(DWORD color, int power);
 
 ACTION clearWindows();

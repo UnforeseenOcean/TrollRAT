@@ -72,4 +72,42 @@ namespace TrollRATPayloads.Payloads
             payloadTrain((int)xPower.Value, (int)yPower.Value);
         }
     }
+
+    public class PayloadDrawPixels : LoopingPayload
+    {
+        [DllImport("Plugins\\TrollRATNative.dll")]
+        public static extern void payloadDrawPixels(uint color, int power);
+
+        private PayloadSettingNumber power = new PayloadSettingNumber(500, "Changed Pixels per Iteration", 1, 10000, 1);
+        protected PayloadSettingSelect color = new PayloadSettingSelect(0, "Color",
+            new string[] { "Black", "White", "Red", "Green", "Blue", "Random (Black/White)", "Random (RGB)" });
+
+        private static readonly uint[] colors = new uint[] { 0x000000, 0xFFFFFF, 0x0000FF, 0x00FF00, 0xFF0000 };
+
+        private Random rng = new Random();
+
+        public PayloadDrawPixels() : base(1)
+        {
+            actions.Add(new PayloadActionClearScreen());
+
+            settings.Add(power);
+            settings.Add(color);
+
+            name = "Draw Pixels on Screen";
+        }
+
+        protected override void execute()
+        {
+            uint c;
+
+            if (color.Value == colors.Length)
+                c = rng.NextDouble() > 0.5 ? colors[0] : colors[1];
+            else if (color.Value == colors.Length + 1)
+                c = (uint)rng.Next();
+            else
+                c = colors[color.Value];
+
+            payloadDrawPixels(c, (int)power.Value);
+        }
+    }
 }
