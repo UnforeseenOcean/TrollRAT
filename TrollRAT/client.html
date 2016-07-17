@@ -42,6 +42,7 @@
 			</div>
 
 			<div class="collapse navbar-collapse" id="navbar">
+				<p class="navbar-text"><b>Status: </b><span id="status"></span></p>
 				<div class="navbar-right">
 					<button class="btn btn-default navbar-btn" onclick="showScreenshot();">Screenshot</button>
 					<button class="btn btn-default navbar-btn" onclick="showEditor();">Run Script</button>
@@ -120,88 +121,91 @@
 
 	<script type="text/javascript">
 		block = false;
+		blockUpdate = false;
 
 		oldpayloads = "";
 		oldactions = "";
 
-		function showError(msg) {
-			$("#error").remove();
+		payloadsRequest = {
+			url: "/payloads", data: {}, old: "", checkOld: true, out: "#payloads", done: function () {
+				updateFilter();
+				if (active != -1) $("#payloads").children().eq(active).addClass("active");
+			}
+		};
 
-			var alert = $('<div class="alert alert-danger alert-dismissable" id="error" role="alert"></div>');
-			alert.append($('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'));
-			alert.append(msg);
-			alert.prependTo($("#content"));
+		payloadData = {};
+		actionsRequest = { url: "/actions", data: payloadData, old: "", checkOld: true, out: "#actions" };
+		settingsRequest = { url: "/settings", data: payloadData, checkOld: false, out: "#settings" };
+
+		function serverFail() {
+			$("#status").html("Connection Lost");
+			window.setTimeout(function () { blockUpdate = false; }, 5000);
 		}
 
 		function update() {
-			var active = $("#payloads").children().index($("#payloads .active"));
-			
-			loadPayloads(active);
-			loadActions(active);
+			if (blockUpdate)
+				return;
 
+			blockUpdate = true;
+			
+			$("#status").html("Updating...");
+			active = payloadData["payload"] = $("#payloads").children().index($("#payloads .active"));
+			
+			var l = new Array();
+			
+			l.push(payloadsRequest);
+			l.push(actionsRequest);
+			
 			if ($("#settings").find($(":focus")).size() == 0)
-				loadSettings(active);
+				l.push(settingsRequest);
+
+			loadContent(l, 0, function () { blockUpdate = false });
 		}
 
 		function onPayloadSelected(obj) {
 			if (block)
 				return;
 			
-			var i = $("#payloads").children().index($(obj));
+			$("#status").html("Loading Payload Data...");
+			active = payloadData["payload"] = $("#payloads").children().index($(obj));
 
 			$("#payloads > .list-group-item").each(function () {
 				$(this).removeClass("active");
 			});
-
-			$(obj).addClass("active");
-
-			loadActions(i);
-			loadSettings(i);
-		}
-
-		function loadActions(active) {
-			$.ajax({
-				method: "GET",
-				url: "/actions",
-				data: { "payload": active }
-			}).done(function (actions) {
-				if (actions != oldactions) {
-					$("#actions").html(actions);
-					oldactions = actions;
-				}
-			}).error(function () {
-				showError("Server communication failed!");
+			
+			loadContent([
+				actionsRequest, settingsRequest
+			], 0, function () {
+				$(obj).addClass("active");
 			});
 		}
 
-		function loadSettings(active) {
+		function loadContent(l, i, done) {
+			var obj = l[i++];
+			
+			obj.data["nocache"] = new Date().getTime();
 			$.ajax({
 				method: "GET",
-				url: "/settings",
-				data: { "payload": active }
-			}).done(function (settings) {
-				$("#settings").html(settings);
-			}).error(function () {
-				showError("Server communication failed!");
-			});
-		}
-
-		function loadPayloads(active) {
-			$.ajax({
-				method: "GET",
-				url: "/payloads",
-			}).done(function (payloads) {
-				if (payloads != oldpayloads) {
-					$("#payloads").html(payloads);
-					updateFilter();
-
-					if (active != -1)
-						$("#payloads").children().eq(active).addClass("active");
-
-					oldpayloads = payloads;
+				url: obj.url,
+				data: obj.data
+			}).done(function (response) {
+				if (!obj.checkOld || response != obj.old) {
+					$(obj.out).html(response);
+					obj.old = response;
 				}
+				
+				if (obj.hasOwnProperty("done"))
+					obj.done();
+
+				if (typeof done !== "undefined")
+					done();
+
+				if (i < l.length)
+					loadContent(l, i);
+				else
+					$("#status").html("Ready");
 			}).error(function () {
-				showError("Server communication failed!");
+				serverFail();
 			});
 		}
 
@@ -219,18 +223,21 @@
 			$.ajax({
 				method: "GET",
 				url: "/about",
+				data: {"nocache": new Date().getTime()}
 			}).done(function (about) {
 				$("#about").html(about);
 				$("#aboutModal").modal();
 			}).error(function () {
-				showError("Server communication failed!");
+				serverFail();
 			});
 		}
 
 		function showScreenshot() {
-			$("#screenshot").attr("src", "/screenshot?t=" + new Date().getTime());
+			$("#status").html("Fetching Screenshot...");
+			$("#screenshot").attr("src", "/screenshot?nocache=" + new Date().getTime());
 
-			$("#screenshot")[0].onload = function() {
+			$("#screenshot")[0].onload = function () {
+				$("status").html("Ready");
 				$("#screenshotModal").modal();
 			};
 		}
@@ -242,11 +249,11 @@
 			$.ajax({
 				method: "GET",
 				url: "/execute",
-				data: {"id": id}
+				data: { "id": id, "nocache": new Date().getTime()}
 			}).done(function (js) {
 				eval(js);
 			}).error(function () {
-				showError("Server communication failed!");
+				serverFail();
 			});
 		}
 
@@ -254,9 +261,9 @@
 			$.ajax({
 				method: "GET",
 				url: "/set",
-				data: { "id": id, "value": value }
+				data: { "id": id, "value": value, "nocache": new Date().getTime() }
 			}).error(function () {
-				showError("Server communication failed!");
+				serverFail();
 			});
 		}
 
@@ -270,7 +277,7 @@
 			}).done(function (results) {
 				alert(results);
 			}).error(function () {
-				showError("Server communication failed!");
+				serverFail();
 			});
 		}
 
