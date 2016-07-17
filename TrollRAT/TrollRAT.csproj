@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Server\ScreenshotCommand.cs" />
     <Compile Include="Server\ScriptingCommands.cs" />
     <Compile Include="Utils\Firewall.cs" />
     <Compile Include="Utils\IDBase.cs" />

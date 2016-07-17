@@ -15,10 +15,10 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <!-- CodeMirror for scripting support -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/clike/clike.min.js"></script>
+	<!-- CodeMirror for scripting support -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.css">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/clike/clike.min.js"></script>
 
 	<style type="text/css">
 		body {
@@ -42,17 +42,18 @@
 			</div>
 
 			<div class="collapse navbar-collapse" id="navbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><button class="btn btn-default navbar-btn" onclick="showEditor();">Run Script</button></li>
-                </ul>
-            </div>
+				<div class="navbar-right">
+					<button class="btn btn-default navbar-btn" onclick="screenshot();">Screenshot</button>
+					<button class="btn btn-default navbar-btn" onclick="showEditor();">Run Script</button>
+				</div>
+			</div>
 		</div>
 	</nav>
 
 	<div class="container" id="content">
-        <div class="alert alert-warning" id="noscript" role="alert">
-            <strong>JavaScript is disabled.</strong> This page does not work without JavaScript.
-        </div>
+		<div class="alert alert-warning" id="noscript" role="alert">
+			<strong>JavaScript is disabled.</strong> This page does not work without JavaScript.
+		</div>
 
 		<div class="row">
 			<div class="col-md-4">
@@ -62,10 +63,10 @@
 
 			<div class="col-md-8">
 				<h3>Settings</h3>
-				<div id="settings"></div>
+				<div id="settings">Nothing here.</div>
 
 				<h3>Actions</h3>
-				<div id="actions"></div>
+				<div id="actions">Nothing here.</div>
 			</div>
 		</div>
 
@@ -81,22 +82,39 @@
 			</div>
 		</div>
 
-        <div class="modal" id="scriptModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Run Script</h4>
-                    </div>
-                    <div class="modal-body">
-                        <textarea class="form-control" rows="8" id="code"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="runScript();">Run Script</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="modal" id="scriptModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Run Script</h4>
+					</div>
+					<div class="modal-body">
+						<textarea class="form-control" rows="8" id="code"></textarea>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" onclick="runScript();">Run Script</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="screenshotModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Screenshot</h4>
+					</div>
+					<div class="modal-body">
+						<img id="screenshot" style="width: 100%;" src="/screenshot.png" />
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" onclick="screenshot();"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -197,6 +215,13 @@
 			});
 		}
 
+		function screenshot() {
+			$("#screenshot").attr("src", "/screenshot?" + new Date().getTime());
+			$("#screenshot").load(function () {
+				$("#screenshotModal").modal();
+			});
+		}
+
 		function execute(id) {
 			block = true;
 			window.setTimeout(function () { block = false }, 100);
@@ -225,26 +250,26 @@
 		codemirror = null;
 
 		function runScript() {
-		    $.ajax({
-		        method: "POST",
-		        url: "/runscript",
-		        data: codemirror.getValue()
-		    }).done(function (results) {
-		        alert(results);
-		    }).error(function () {
-		        showError("Server communication failed!");
-		    });
+			$.ajax({
+				method: "POST",
+				url: "/runscript",
+				data: codemirror.getValue()
+			}).done(function (results) {
+				alert(results);
+			}).error(function () {
+				showError("Server communication failed!");
+			});
 		}
 
 		function showEditor() {
-		    $('#scriptModal').modal();
-            
-		    if (!codemirror) {
-		        codemirror = CodeMirror.fromTextArea($("#code")[0], {
-		            lineNumbers: true,
-		            mode: "text/x-csharp"
-		        });
-		    }
+			$('#scriptModal').modal();
+			
+			if (!codemirror) {
+				codemirror = CodeMirror.fromTextArea($("#code")[0], {
+					lineNumbers: true,
+					mode: "text/x-csharp"
+				});
+			}
 		}
 
 		code = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];

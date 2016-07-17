@@ -4,6 +4,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
  - Web GUI
     - [x] Simple and functional Web GUI
 	- [x] Basic scripting support
+	- [x] Screenshot function
     - [ ] Savable presets and panic function
     - [x] Multi-User support (auto update)
     - [ ] Upload support
@@ -27,6 +28,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Open Program/Website
     - [x] Melting Screen
 	- [x] Train/Elevator effect
+	- [x] Draw Pixels to Screen
     - [ ] Crash PC
     - [x] Earthquake (Shaking Screen)
     - [ ] Shaking Windows
