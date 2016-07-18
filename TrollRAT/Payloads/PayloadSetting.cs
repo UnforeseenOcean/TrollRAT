@@ -102,17 +102,12 @@ namespace TrollRAT.Payloads
         }
     }
 
-    public class PayloadSettingSelect : TitledPayloadSetting<int>
+    public abstract class PayloadSettingSelectBase : TitledPayloadSetting<int>
     {
-        protected string[] options;
-        public string[] Options => options;
+        public abstract string[] Options { get; set; }
+        public string ValueText => Options[value];
 
-        public string ValueText => options[value];
-
-        public PayloadSettingSelect(int defaultValue, string title, string[] options) : base(defaultValue, title)
-        {
-            this.options = options;
-        }
+        public PayloadSettingSelectBase(int defaultValue, string title) : base(defaultValue, title) { }
 
         public override void writeHTML(StringBuilder builder)
         {
@@ -120,9 +115,10 @@ namespace TrollRAT.Payloads
                 "class=\"form-control\" onchange=\"setSetting({1}, this.selectedIndex);\">",
                 title, id, value));
 
+            string[] options = Options;
             for (int i = 0; i < options.Length; i++)
             {
-                builder.Append((i==value ? "<option selected=\"selected\">" : "<option>") + options[i] + "</option>");
+                builder.Append((i == value ? "<option selected=\"selected\">" : "<option>") + options[i] + "</option>");
             }
 
             builder.Append("</select></div>");
@@ -140,7 +136,23 @@ namespace TrollRAT.Payloads
 
         public override bool isValid(int v)
         {
-            return (v >= 0 && v < options.Length);
+            return (v >= 0 && v < Options.Length);
+        }
+    }
+
+    public class PayloadSettingSelect : PayloadSettingSelectBase
+    {
+        protected string[] options;
+
+        public override string[] Options
+        {
+            get { return options; }
+            set { options = value; }
+        }
+
+        public PayloadSettingSelect(int defaultValue, string title, string[] options) : base(defaultValue, title)
+        {
+            this.options = options;
         }
     }
 }

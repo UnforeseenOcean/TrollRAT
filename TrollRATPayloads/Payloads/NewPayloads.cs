@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Speech.Synthesis;
 
 using TrollRAT.Payloads;
 using TrollRATActions;
@@ -108,6 +110,57 @@ namespace TrollRATPayloads.Payloads
                 c = colors[color.Value];
 
             payloadDrawPixels(c, (int)power.Value);
+        }
+    }
+
+    public class PayloadTTS : Payload
+    {
+        protected class PayloadSettingVoice : PayloadSettingSelectBase
+        {
+            public InstalledVoice SelectedVoice => synth.GetInstalledVoices()[value];
+
+            public PayloadSettingVoice(string title) : base(0, title) { }
+
+            public override string[] Options
+            {
+                get
+                {
+                    return (from voice in synth.GetInstalledVoices()
+                            select voice.VoiceInfo.Name).ToArray();
+                }
+                set { throw new NotImplementedException(); }
+            }
+        }
+
+        private PayloadSettingString message = new PayloadSettingString(
+            "soi soi soi soi soi soi soi soi soi soi soi", "Message to speak");
+
+        private PayloadSettingNumber rate = new PayloadSettingNumber(1, "Speed Rate", -10, 10, 1);
+        private PayloadSettingNumber volume = new PayloadSettingNumber(100, "Volume", 0, 100, 1);
+
+        private PayloadSettingVoice voice = new PayloadSettingVoice("TTS Voice");
+
+        protected static SpeechSynthesizer synth = new SpeechSynthesizer();
+
+        public PayloadTTS()
+        {
+            settings.Add(message);
+            settings.Add(voice);
+            settings.Add(volume);
+            settings.Add(rate);
+
+            synth.SetOutputToDefaultAudioDevice();
+
+            name = "Play TTS Voice";
+        }
+
+        protected override void execute()
+        {
+            synth.Rate = (int)rate.Value;
+            synth.Volume = (int)volume.Value;
+
+            synth.SelectVoice(voice.SelectedVoice.VoiceInfo.Name);
+            synth.Speak(message.Value);
         }
     }
 }

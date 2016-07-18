@@ -13,7 +13,6 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Basic API for Payloads, Actions and Settings
     - [ ] Support for random Payload Delays
     - [x] Plugin support
-    - [ ] More pre-defined settings classes
  - Coding
     - [x] Split server commands into multiple classes
     - [x] Firewall support
@@ -36,5 +35,5 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [ ] Crash single Program
     - [ ] Draw uploaded Images
     - [ ] Play uploaded Sounds
-	- [ ] Text to Speech Output
+	- [x] Text to Speech Output
 	- [ ] Multi-Monitor support for payloads

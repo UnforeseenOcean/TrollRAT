@@ -15,6 +15,7 @@ namespace TrollRATPayloads
         public void onLoad()
         {
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadOpen());
+            TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadTTS());
 
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadMessageBox());
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadKeyboard());
