@@ -132,6 +132,20 @@ namespace TrollRATPayloads.Payloads
             }
         }
 
+        protected class PayloadActionStop : SimplePayloadAction
+        {
+            public PayloadActionStop(Payload payload) : base(payload) { }
+
+            public override string Icon => null;
+            public override string Title => "Stop Speaking";
+
+            public override string execute()
+            {
+                synth.SpeakAsyncCancelAll();
+                return "void(0);";
+            }
+        }
+
         private PayloadSettingString message = new PayloadSettingString(
             "soi soi soi soi soi soi soi soi soi soi soi", "Message to speak");
 
@@ -149,6 +163,8 @@ namespace TrollRATPayloads.Payloads
             settings.Add(volume);
             settings.Add(rate);
 
+            actions.Add(new PayloadActionStop(this));
+
             synth.SetOutputToDefaultAudioDevice();
 
             name = "Play TTS Voice";
@@ -160,7 +176,12 @@ namespace TrollRATPayloads.Payloads
             synth.Volume = (int)volume.Value;
 
             synth.SelectVoice(voice.SelectedVoice.VoiceInfo.Name);
-            synth.Speak(message.Value);
+
+            try
+            {
+                synth.Speak(message.Value);
+            }
+            catch (Exception) { }
         }
     }
 }
