@@ -40,7 +40,7 @@ namespace TrollRATActions
     {
         public PayloadActionClearWindows(Payload payload) : base(payload) { }
 
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("..\\TrollRATPayloads\\TrollRATNative.dll")]
         static extern void clearWindows();
 
         public override string execute()
