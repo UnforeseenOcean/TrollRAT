@@ -32,15 +32,17 @@ namespace TrollRATPayloads.Payloads
     public class PayloadMeltingScreen : LoopingPayload
     {
         [DllImport("TrollRATNative.dll")]
-        public static extern void payloadMeltingScreen(int size, int power);
+        public static extern void payloadMeltingScreen(int xSize, int ySize, int power);
 
-        private PayloadSettingNumber size = new PayloadSettingNumber(30, "Bar Size", 4, 200, 1);
+        private PayloadSettingNumber xSize = new PayloadSettingNumber(30, "X Size", 1, 200, 1);
+        private PayloadSettingNumber ySize = new PayloadSettingNumber(8, "Y Size", 1, 200, 1);
         private PayloadSettingNumber power = new PayloadSettingNumber(10, "Power", 1, 40, 1);
 
         public PayloadMeltingScreen() : base(4)
         {
             actions.Add(new PayloadActionClearScreen(this));
-            settings.Add(size);
+            settings.Add(xSize);
+            settings.Add(ySize);
             settings.Add(power);
 
             name = "Melting Screen";
@@ -48,7 +50,7 @@ namespace TrollRATPayloads.Payloads
 
         protected override void execute()
         {
-            payloadMeltingScreen((int)size.Value, (int)power.Value);
+            payloadMeltingScreen((int)xSize.Value, (int)ySize.Value, (int)power.Value);
         }
     }
 

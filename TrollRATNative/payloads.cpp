@@ -212,27 +212,28 @@ PAYLOAD payloadEarthquake(int delay, int power) {
 	FreeHDCs
 }
 
-PAYLOAD payloadMeltingScreen(int size, int power) {
+PAYLOAD payloadMeltingScreen(int xSize, int ySize, int power) {
 	InitHDCs
 
-	if (size >= w) size = w - 1;
+	if (xSize >= w) xSize = w - 1;
+	if (ySize >= h) ySize = h - 1;
 
-	HBITMAP screenshot = CreateCompatibleBitmap(hdc, size, rekt.bottom);
+	HBITMAP screenshot = CreateCompatibleBitmap(hdc, xSize, rekt.bottom);
 	HDC hdc2 = CreateCompatibleDC(hdc);
 	SelectObject(hdc2, screenshot);
 
 	for (int i = 0; i < power; i++) {
-		int x = random() % (w - size);
+		int x = random() % (w - xSize);
 
-		BitBlt(hdc2, 0, 0, size, h, hdc, x, 0, SRCCOPY);
+		BitBlt(hdc2, 0, 0, xSize, h, hdc, x, 0, SRCCOPY);
 
-		for (int j = 0; j < size; j++) {
-			int depth = sin(j / ((float)size)*3.14159)*(size / 4);
+		for (int j = 0; j < xSize; j++) {
+			int depth = sin(j / ((float)xSize)*3.14159)*(ySize);
 			StretchBlt(hdc2, j, 0, 1, depth, hdc2, j, 0, 1, 1, SRCCOPY);
 			BitBlt(hdc2, j, 0, 1, h, hdc2, j, -depth, SRCCOPY);
 		}
 
-		BitBlt(hdc, x, 0, size, h, hdc2, 0, 0, SRCCOPY);
+		BitBlt(hdc, x, 0, xSize, h, hdc2, 0, 0, SRCCOPY);
 	}
 
 	DeleteDC(hdc2);

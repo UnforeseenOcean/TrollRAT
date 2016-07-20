@@ -18,7 +18,7 @@ PAYLOAD payloadDrawErrors(int count, int chance);
 PAYLOAD payloadInvertScreen();
 PAYLOAD payloadCursor(int power);
 PAYLOAD payloadEarthquake(int delay, int power);
-PAYLOAD payloadMeltingScreen(int size, int power);
+PAYLOAD payloadMeltingScreen(int xSize, int ySize, int power);
 PAYLOAD payloadTrain(int xPower, int yPower);
 PAYLOAD payloadDrawPixels(DWORD color, int power);
 
