@@ -24,7 +24,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
  - Payloads
     - [x] Simple payloads from MEMZ
         - [x] Ability to change MessageBox text
-		- [ ] Ability to change MessageBox icon
+		- [x] Ability to change MessageBox icon
     - [x] Restore function for MessageBoxes and visual payloads
     - [x] Open Program/Website
     - [x] Melting Screen
