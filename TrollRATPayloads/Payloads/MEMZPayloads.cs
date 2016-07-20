@@ -13,7 +13,7 @@ namespace TrollRATPayloads.Payloads
         [DllImport("TrollRATNative.dll", CharSet = CharSet.Auto)]
         public static extern void payloadMessageBox(string text, string label, int style, int mode);
 
-        protected PayloadSettingSelect mode = new PayloadSettingSelect(3, "Mode",
+        protected PayloadSettingSelect mode = new PayloadSettingSelect(0, "Mode",
             new string[] { "Fixed Text", "Random Error Messages" });
 
         protected PayloadSettingString text = new PayloadSettingString("Still using this computer?", "Message Box Text");

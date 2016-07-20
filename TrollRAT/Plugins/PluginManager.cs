@@ -12,12 +12,15 @@ namespace TrollRAT.Plugins
 
         internal void loadPlugins()
         {
-
+            var pluginFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), "Plugins");
             var catalog = new AggregateCatalog();
 
-            foreach (string dir in Directory.GetDirectories(
-                Path.Combine(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), "Plugins"))) {
-                catalog.Catalogs.Add(new DirectoryCatalog(dir));
+            if (Directory.Exists(pluginFolder))
+            {
+                foreach (string dir in Directory.GetDirectories(pluginFolder))
+                {
+                    catalog.Catalogs.Add(new DirectoryCatalog(dir));
+                }
             }
 
             var container = new CompositionContainer(catalog);
