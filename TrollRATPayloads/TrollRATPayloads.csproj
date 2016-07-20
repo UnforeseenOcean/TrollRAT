@@ -55,13 +55,20 @@
     <ProjectReference Include="..\TrollRATActions\TrollRATActions.csproj">
       <Project>{9bf0213e-2757-4898-8c94-42f1e464c468}</Project>
       <Name>TrollRATActions</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\TrollRAT\TrollRAT.csproj">
       <Project>{646733a7-d07d-48d2-b064-edcadd6dee1f}</Project>
       <Name>TrollRAT</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set x="$(SolutionDir)\Output\Plugins\TrollRATPayloads\"
+mkdir %25x%25
+copy "$(TargetPath)" %25x%25</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
