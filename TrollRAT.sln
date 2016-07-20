@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollRATPayloads", "TrollRA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollRATActions", "TrollRATActions\TrollRATActions.csproj", "{9BF0213E-2757-4898-8C94-42F1E464C468}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crasher", "Crasher\Crasher.csproj", "{9AD2E477-397B-4642-9D2C-66196EA2CAA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,7 @@ Global
 		{646733A7-D07D-48D2-B064-EDCADD6DEE1F}.Release|x86.ActiveCfg = Release|Any CPU
 		{646733A7-D07D-48D2-B064-EDCADD6DEE1F}.Release|x86.Build.0 = Release|Any CPU
 		{1CBD0582-81FE-4145-A51A-16FF96EB8B34}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{1CBD0582-81FE-4145-A51A-16FF96EB8B34}.Debug|Any CPU.Build.0 = Debug|Win32
 		{1CBD0582-81FE-4145-A51A-16FF96EB8B34}.Debug|x64.ActiveCfg = Debug|x64
 		{1CBD0582-81FE-4145-A51A-16FF96EB8B34}.Debug|x64.Build.0 = Debug|x64
 		{1CBD0582-81FE-4145-A51A-16FF96EB8B34}.Debug|x86.ActiveCfg = Debug|Win32
@@ -67,6 +70,18 @@ Global
 		{9BF0213E-2757-4898-8C94-42F1E464C468}.Release|x64.Build.0 = Release|Any CPU
 		{9BF0213E-2757-4898-8C94-42F1E464C468}.Release|x86.ActiveCfg = Release|Any CPU
 		{9BF0213E-2757-4898-8C94-42F1E464C468}.Release|x86.Build.0 = Release|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Debug|x64.Build.0 = Debug|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Debug|x86.Build.0 = Debug|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Release|x64.ActiveCfg = Release|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Release|x64.Build.0 = Release|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Release|x86.ActiveCfg = Release|Any CPU
+		{9AD2E477-397B-4642-9D2C-66196EA2CAA1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

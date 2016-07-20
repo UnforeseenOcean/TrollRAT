@@ -11,8 +11,10 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Search function
  - API
     - [x] Basic API for Payloads, Actions and Settings
+	- [x] Plugin support
     - [ ] Support for random Payload Delays
-    - [x] Plugin support
+	- [ ] Plugins can provide their own JavaScript additions
+	- [ ] API for Global Actions (e.g. Screenshot and Run Script)
  - Coding
     - [x] Split server commands into multiple classes
     - [x] Firewall support
@@ -28,11 +30,11 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
     - [x] Melting Screen
 	- [x] Train/Elevator effect
 	- [x] Draw Pixels to Screen
-    - [ ] Crash PC
+    - [x] Crash PC
     - [x] Earthquake (Shaking Screen)
     - [ ] Shaking Windows
     - [ ] Show/Hide Windows
-    - [ ] Crash single Program
+    - [x] Crash single Program
     - [ ] Draw uploaded Images
     - [ ] Play uploaded Sounds
 	- [x] Text to Speech Output

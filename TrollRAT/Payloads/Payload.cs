@@ -14,12 +14,15 @@ namespace TrollRAT.Payloads
 
         protected List<PayloadAction> actions = new List<PayloadAction>();
         public List<PayloadAction> Actions => actions;
+    }
 
+    public abstract class ExecutablePayload : Payload
+    {
         protected abstract void execute();
-        
-        public Payload()
+
+        public ExecutablePayload()
         {
-            actions.Add(new PayloadActionExecute());
+            actions.Add(new PayloadActionExecute(this));
         }
 
         public void Execute()
@@ -29,7 +32,7 @@ namespace TrollRAT.Payloads
         }
     }
 
-    public abstract class LoopingPayload : Payload
+    public abstract class LoopingPayload : ExecutablePayload
     {
         protected bool running = false;
         public bool Running => running;
@@ -44,7 +47,7 @@ namespace TrollRAT.Payloads
             delay = new PayloadSettingNumber(defaultDelay, "Delay (in 1/100 seconds)", 1, 10000, 1);
 
             settings.Add(delay);
-            actions.Add(new PayloadActionStartStop());
+            actions.Add(new PayloadActionStartStop(this));
 
             var thread = new Thread(new ThreadStart(Loop));
             thread.Start();

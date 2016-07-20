@@ -48,7 +48,7 @@ namespace TrollRAT.Server
 
                 foreach (PayloadAction action in payload.Actions)
                 {
-                    string btn = action.getListButton(payload);
+                    string btn = action.getListButton();
                     if (btn != null)
                     {
                         content.Append(btn);

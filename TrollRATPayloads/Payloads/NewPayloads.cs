@@ -10,14 +10,14 @@ namespace TrollRATPayloads.Payloads
 {
     public class PayloadEarthquake : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadEarthquake(int delay, int power);
 
         private PayloadSettingNumber power = new PayloadSettingNumber(20, "Movement Factor", 2, 60, 1);
 
         public PayloadEarthquake() : base(4)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
             settings.Add(power);
 
             name = "Earthquake (Shake Screen)";
@@ -31,7 +31,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadMeltingScreen : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadMeltingScreen(int size, int power);
 
         private PayloadSettingNumber size = new PayloadSettingNumber(30, "Bar Size", 4, 200, 1);
@@ -39,7 +39,7 @@ namespace TrollRATPayloads.Payloads
 
         public PayloadMeltingScreen() : base(4)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
             settings.Add(size);
             settings.Add(power);
 
@@ -54,7 +54,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadTrain : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadTrain(int xPower, int yPower);
 
         private PayloadSettingNumber xPower = new PayloadSettingNumber(10, "X Movement", -100, 100, 1);
@@ -62,7 +62,7 @@ namespace TrollRATPayloads.Payloads
 
         public PayloadTrain() : base(5)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
             settings.Add(xPower);
             settings.Add(yPower);
 
@@ -77,7 +77,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadDrawPixels : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadDrawPixels(uint color, int power);
 
         private PayloadSettingNumber power = new PayloadSettingNumber(500, "Changed Pixels per Iteration", 1, 10000, 1);
@@ -90,7 +90,7 @@ namespace TrollRATPayloads.Payloads
 
         public PayloadDrawPixels() : base(1)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
 
             settings.Add(power);
             settings.Add(color);
@@ -113,7 +113,7 @@ namespace TrollRATPayloads.Payloads
         }
     }
 
-    public class PayloadTTS : Payload
+    public class PayloadTTS : ExecutablePayload
     {
         protected class PayloadSettingVoice : PayloadSettingSelectBase
         {

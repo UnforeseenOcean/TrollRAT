@@ -1,20 +1,27 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using TrollRAT.Utils;
 
 namespace TrollRAT.Payloads
 {
     public abstract class PayloadAction : IDBase<PayloadAction>
     {
-        public abstract string getListButton(Payload payload);
-        public abstract string getSettingsButton(Payload payload);
+        protected Payload payload;
+        public Payload Payload => payload;
+
+        public PayloadAction(Payload payload)
+        {
+            this.payload = payload;
+        }
+
+        public abstract string getListButton();
+        public abstract string getSettingsButton();
 
         // Returns JavaScript to be executed by the client
-        public abstract string execute(Payload payload);
+        public abstract string execute();
 
         // Returns the JavaScript that should be used for the button
         // in order to trigger its server routine
-        public string getExecuteJavascript()
+        public virtual string getExecuteJavascript()
         {
             return String.Format("execute({0});", id);
         }
@@ -22,82 +29,89 @@ namespace TrollRAT.Payloads
 
     public abstract class SimplePayloadAction : PayloadAction
     {
-        public override string getListButton(Payload payload)
-        {
-            string icon = getIcon(payload);
+        public SimplePayloadAction(Payload payload) : base(payload) { }
 
-            if (icon == null)
+        public abstract string Title { get; }
+        public abstract string Icon { get; }
+        public virtual string Color => "default";
+
+        public override string getListButton()
+        {
+            if (Icon == null)
                 return null;
 
-            return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-default btn-xs\">" +
+            return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-{2} btn-xs\">" +
                 "<span class=\"glyphicon glyphicon-{1}\" aria-hidden=\"true\"></span></button> ",
-                getExecuteJavascript(), icon);
+                getExecuteJavascript(), Icon, Color);
         }
 
-        public override string getSettingsButton(Payload payload)
+        public override string getSettingsButton()
         {
-            return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-default btn-xl\">" +
-               "{1}</button> ", getExecuteJavascript(), getTitle(payload));
+            return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-{2} btn-xl\">" +
+               "{1}</button> ", getExecuteJavascript(), Title, Color);
         }
+    }
 
-        public abstract string getTitle(Payload payload);
-        public abstract string getIcon(Payload payload);
+    public abstract class DangerousPayloadAction : SimplePayloadAction
+    {
+        public DangerousPayloadAction(Payload payload) : base(payload) { }
+
+        // TODO Proper Escaping
+        public abstract string WarningMessage { get; }
+
+        public override string Color => "danger";
+
+        public override string getExecuteJavascript()
+        {
+            return String.Format("showYesNo('{0}', '{2}', '{1}');", WarningMessage, base.getExecuteJavascript(), Title);
+        }
     }
 
     public class PayloadActionExecute : SimplePayloadAction
     {
-        public override string execute(Payload payload)
+        public override string Title => "Execute";
+        public override string Icon => "cog";
+
+        public PayloadActionExecute(Payload payload) : base(payload) { }
+
+        public override string execute()
         {
-            payload.Execute();
+            if (payload is ExecutablePayload)
+            {
+                ExecutablePayload pl = ((ExecutablePayload)payload);
+                pl.Execute();
+            }
+            else
+            {
+                throw new ArgumentException("Payload is not an ExecutablePayload");
+            }
+
             return "void(0);";
         }
-
-        public override string getIcon(Payload payload) { return "cog"; }
-        public override string getTitle(Payload payload) { return "Execute"; }
     }
 
     public class PayloadActionStartStop : SimplePayloadAction
     {
-        public override string execute(Payload payload)
+        LoopingPayload pl;
+        public PayloadActionStartStop(Payload payload) : base(payload)
         {
             if (payload is LoopingPayload)
-            {
-                LoopingPayload pl = ((LoopingPayload)payload);
-                if (pl.Running)
-                {
-                    pl.Stop();
-                } else
-                {
-                    pl.Start();
-                }
-            } else
-            {
+                pl = ((LoopingPayload)payload);
+            else
                 throw new ArgumentException("Payload is not a LoopingPayload");
-            }
+        }
+
+        public override string execute()
+        {
+            if (pl.Running)
+                pl.Stop();
+            else
+                pl.Start();
 
             return "update();";
         }
-
-        public override string getIcon(Payload payload)
-        {
-            if (payload is LoopingPayload)
-            {
-                LoopingPayload pl = ((LoopingPayload)payload);
-                return pl.Running ? "stop" : "play";
-            }
-
-            throw new ArgumentException("Payload is not a LoopingPayload");
-        }
-
-        public override string getTitle(Payload payload)
-        {
-            if (payload is LoopingPayload)
-            {
-                LoopingPayload pl = ((LoopingPayload)payload);
-                return pl.Running ? "Stop" : "Start";
-            }
-
-            throw new ArgumentException("Payload is not a LoopingPayload");
-        }
+        
+        public override string Icon => pl.Running ? "stop" : "play";
+        public override string Title => pl.Running ? "Stop" : "Start";
     }
 }

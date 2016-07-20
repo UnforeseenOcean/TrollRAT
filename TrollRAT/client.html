@@ -101,6 +101,22 @@
 			</div>
 		</div>
 
+        <div class="modal" id="yesNoModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="yesNoTitle"></h4>
+                    </div>
+                    <div class="modal-body" id="yesNoContent"></div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+                        <button type="button" data-dismiss="modal" id="yesBtn" class="btn btn-primary">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 		<div class="modal fade" id="screenshotModal" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -140,6 +156,13 @@
 		function serverFail() {
 			$("#status").html("Connection Lost");
 			window.setTimeout(function () { blockUpdate = false; }, 5000);
+		}
+
+		function showYesNo(message, title, yesAction) {
+		    $("#yesBtn").attr("onclick", yesAction);
+		    $("#yesNoTitle").html(title);
+		    $("#yesNoContent").html(message);
+		    $("#yesNoModal").modal();
 		}
 
 		function update() {
@@ -251,7 +274,10 @@
 				url: "/execute",
 				data: { "id": id, "nocache": new Date().getTime()}
 			}).done(function (js) {
-				eval(js);
+			    // This is not even required, because jQuery already executes the script because of it's MIME type.
+			    // This means, using this, the script would be executed twice.
+
+				//eval(js);
 			}).error(function () {
 				serverFail();
 			});

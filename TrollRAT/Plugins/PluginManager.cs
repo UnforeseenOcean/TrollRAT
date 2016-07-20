@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.IO;
+using System.Reflection;
 
 namespace TrollRAT.Plugins
 {
@@ -10,7 +12,14 @@ namespace TrollRAT.Plugins
 
         internal void loadPlugins()
         {
-            var catalog = new DirectoryCatalog("Plugins");
+
+            var catalog = new AggregateCatalog();
+
+            foreach (string dir in Directory.GetDirectories(
+                Path.Combine(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), "Plugins"))) {
+                catalog.Catalogs.Add(new DirectoryCatalog(dir));
+            }
+
             var container = new CompositionContainer(catalog);
             container.ComposeParts(this);
 

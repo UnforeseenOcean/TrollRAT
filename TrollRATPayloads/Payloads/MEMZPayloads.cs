@@ -10,7 +10,7 @@ namespace TrollRATPayloads.Payloads
 {
     public class PayloadMessageBox : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll", CharSet = CharSet.Auto)]
+        [DllImport("TrollRATNative.dll", CharSet = CharSet.Auto)]
         public static extern void payloadMessageBox(string text, string label, int style, int mode);
 
         protected PayloadSettingSelect mode = new PayloadSettingSelect(3, "Mode",
@@ -33,7 +33,7 @@ namespace TrollRATPayloads.Payloads
 
             settings.Add(icon);
 
-            actions.Add(new PayloadActionClearWindows());
+            actions.Add(new PayloadActionClearWindows(this));
         }
 
         protected override void execute()
@@ -53,7 +53,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadGlitch : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadGlitch(int maxSize, int power);
 
         protected PayloadSettingNumber maxSize = new PayloadSettingNumber(500, "Maximum Rectangle Size", 20, 1000, 1);
@@ -61,7 +61,7 @@ namespace TrollRATPayloads.Payloads
 
         public PayloadGlitch() : base(20)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
 
             settings.Add(maxSize);
             settings.Add(power);
@@ -77,7 +77,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadSound : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadSound(int sound);
 
         protected PayloadSettingSelect sound = new PayloadSettingSelect(6, "Sound Type",
@@ -112,14 +112,14 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadTunnel : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadTunnel(int scale);
 
         protected PayloadSettingNumber scale = new PayloadSettingNumber(50, "Scale factor per iteration", 1, 400, 1);
 
         public PayloadTunnel() : base(20)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
             settings.Add(scale);
 
             name = "Tunnel Effect";
@@ -133,7 +133,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadReverseText : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadReverseText();
 
         public PayloadReverseText() { name = "Reverse Text"; }
@@ -146,7 +146,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadDrawErrors : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadDrawErrors(int count, int chance);
 
         protected PayloadSettingNumber errorCount = new PayloadSettingNumber(2, "Error Count", 1, 40, 1);
@@ -154,7 +154,7 @@ namespace TrollRATPayloads.Payloads
 
         public PayloadDrawErrors() : base(2)
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
 
             settings.Add(errorCount);
             settings.Add(errorChance);
@@ -170,12 +170,12 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadInvertScreen : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadInvertScreen();
 
         public PayloadInvertScreen()
         {
-            actions.Add(new PayloadActionClearScreen());
+            actions.Add(new PayloadActionClearScreen(this));
             name = "Invert Screen";
         }
 
@@ -187,7 +187,7 @@ namespace TrollRATPayloads.Payloads
 
     public class PayloadCursor : LoopingPayload
     {
-        [DllImport("Plugins\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         public static extern void payloadCursor(int power);
 
         private PayloadSettingNumber power = new PayloadSettingNumber(4, "Movement Factor", 2, 100, 1);
