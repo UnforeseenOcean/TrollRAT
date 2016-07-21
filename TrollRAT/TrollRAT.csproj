@@ -66,9 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Server\ScreenshotCommand.cs" />
-    <Compile Include="Server\ShareCodeCommands.cs" />
-    <Compile Include="Server\ScriptingCommands.cs" />
+    <Compile Include="Actions\GlobalAction.cs" />
+    <Compile Include="Actions\GlobalActions.cs" />
+    <Compile Include="Server\Commands\ScreenshotCommand.cs" />
+    <Compile Include="Server\Commands\ShareCodeCommands.cs" />
+    <Compile Include="Server\Commands\ScriptingCommands.cs" />
+    <Compile Include="Server\Injections\InjectionPlaceholders.cs" />
     <Compile Include="Utils\Firewall.cs" />
     <Compile Include="Utils\IDBase.cs" />
     <Compile Include="Payloads\Payload.cs" />
@@ -78,10 +81,11 @@
     <Compile Include="Plugins\ITrollRATPlugin.cs" />
     <Compile Include="TrollRAT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server\ActionCommands.cs" />
-    <Compile Include="Server\DetailCommands.cs" />
-    <Compile Include="Server\WebServerCommands.cs" />
+    <Compile Include="Server\Commands\ActionCommands.cs" />
+    <Compile Include="Server\Commands\DetailCommands.cs" />
+    <Compile Include="Server\Commands\WebServerCommands.cs" />
     <Compile Include="Server\WebServer.cs" />
+    <Compile Include="Utils\ResourceUtil.cs" />
     <Compile Include="Utils\ShareCodeUtil.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -115,7 +119,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="client.html" />
+    <EmbeddedResource Include="Web\HTML\main.html" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="NetFwTypeLib">
@@ -128,6 +132,30 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <Private>False</Private>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\JS\gaia.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\JS\main.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\JS\yesno.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\HTML\screenshot.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\HTML\scriptEditor.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\HTML\shareCode.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\HTML\about.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\HTML\yesNo.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

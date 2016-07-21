@@ -5,8 +5,9 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
 	- [x] Simple and functional Web GUI
 	- [x] Basic scripting support
 	- [x] Screenshot function
-	- [ ] Savable presets and panic function
+	- [ ] Savable presets
 	- [x] Sharing Code for presets
+	- [x] Panic function
 	- [x] Multi-User support (auto update)
 	- [ ] Upload support
 	- [x] Search function
@@ -15,7 +16,7 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
 	- [x] Plugin support
 	- [ ] Support for random Payload Delays
 	- [ ] Plugins can provide their own JavaScript additions
-	- [ ] API for Global Actions (e.g. Screenshot and Run Script)
+	- [x] API for Global Actions (e.g. Screenshot and Run Script)
  - Coding
 	- [x] Split server commands into multiple classes
 	- [x] Firewall support

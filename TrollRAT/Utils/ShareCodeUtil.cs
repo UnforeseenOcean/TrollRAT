@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Text;
-using System.Windows.Forms;
+using TrollRAT.Actions;
 using TrollRAT.Payloads;
-using TrollRAT.Plugins;
 
 namespace TrollRAT.Utils
 {
@@ -84,6 +81,11 @@ namespace TrollRAT.Utils
                     if (!reader.ReadBytes(pluginsHash.Length).SequenceEqual(pluginsHash))
                         throw new ShareCodeWrongVersionException();
 
+                    foreach (GlobalActionServer action in TrollRAT.Server.Actions.Where(a => a is GlobalActionServer))
+                    {
+                        action.readFromStream(reader);
+                    }
+
                     foreach (var payload in TrollRAT.Server.Payloads)
                     {
                         payload.readFromStream(reader);
@@ -100,6 +102,11 @@ namespace TrollRAT.Utils
                 using (var writer = new BinaryWriter(stream))
                 {
                     writer.Write(getPluginsHash());
+
+                    foreach (GlobalActionServer action in TrollRAT.Server.Actions.Where(a => a is GlobalActionServer))
+                    {
+                        action.writeToStream(writer);
+                    }
 
                     foreach (Payload payload in TrollRAT.Server.Payloads)
                     {

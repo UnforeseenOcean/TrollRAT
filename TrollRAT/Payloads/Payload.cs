@@ -51,6 +51,8 @@ namespace TrollRAT.Payloads
 
     public abstract class LoopingPayload : ExecutablePayload
     {
+        public static bool pausePayloads = false;
+
         protected bool running = false;
         public bool Running => running;
 
@@ -87,7 +89,7 @@ namespace TrollRAT.Payloads
         {
             while (true)
             {
-                if (running)
+                if (running && !pausePayloads)
                 {
                     execute();
                 }
