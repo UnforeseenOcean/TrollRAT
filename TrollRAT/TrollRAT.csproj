@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server\ScreenshotCommand.cs" />
+    <Compile Include="Server\ShareCodeCommands.cs" />
     <Compile Include="Server\ScriptingCommands.cs" />
     <Compile Include="Utils\Firewall.cs" />
     <Compile Include="Utils\IDBase.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Server\DetailCommands.cs" />
     <Compile Include="Server\WebServerCommands.cs" />
     <Compile Include="Server\WebServer.cs" />
+    <Compile Include="Utils\ShareCodeUtil.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

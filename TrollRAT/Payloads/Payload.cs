@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 namespace TrollRAT.Payloads
@@ -14,6 +15,22 @@ namespace TrollRAT.Payloads
 
         protected List<PayloadAction> actions = new List<PayloadAction>();
         public List<PayloadAction> Actions => actions;
+
+        public virtual void writeToStream(BinaryWriter writer)
+        {
+            foreach (PayloadSetting setting in settings)
+            {
+                setting.writeToStream(writer);
+            }
+        }
+
+        public virtual void readFromStream(BinaryReader reader)
+        {
+            foreach (PayloadSetting setting in settings)
+            {
+                setting.readFromStream(reader);
+            }
+        }
     }
 
     public abstract class ExecutablePayload : Payload
@@ -78,6 +95,18 @@ namespace TrollRAT.Payloads
                 for (i = (int)Delay; i >= 0; i--)
                     Thread.Sleep(10);
             }
+        }
+
+        public override void writeToStream(BinaryWriter writer)
+        {
+            base.writeToStream(writer);
+            writer.Write(running);
+        }
+
+        public override void readFromStream(BinaryReader reader)
+        {
+            base.readFromStream(reader);
+            running = reader.ReadBoolean();
         }
     }
 }

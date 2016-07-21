@@ -44,6 +44,7 @@
 			<div class="collapse navbar-collapse" id="navbar">
 				<p class="navbar-text"><b>Status: </b><span id="status"></span></p>
 				<div class="navbar-right">
+					<button class="btn btn-default navbar-btn" onclick="$('#shareCodeModal').modal();">Share Code Manager</button>
 					<button class="btn btn-default navbar-btn" onclick="showScreenshot();">Screenshot</button>
 					<button class="btn btn-default navbar-btn" onclick="showEditor();">Run Script</button>
 				</div>
@@ -101,21 +102,39 @@
 			</div>
 		</div>
 
-        <div class="modal" id="yesNoModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="yesNoTitle"></h4>
-                    </div>
-                    <div class="modal-body" id="yesNoContent"></div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
-                        <button type="button" data-dismiss="modal" id="yesBtn" class="btn btn-primary">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="modal fade" id="yesNoModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="yesNoTitle"></h4>
+					</div>
+					<div class="modal-body" id="yesNoContent"></div>
+					<div class="modal-footer">
+						<button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+						<button type="button" data-dismiss="modal" id="yesBtn" class="btn btn-primary">Yes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="shareCodeModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Share Code Manager</h4>
+					</div>
+					<div class="modal-body">
+						<textarea style="font-family: monospace;" id="shareCode" rows="10" class="form-control"></textarea>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-default" onclick="generateCode();">Generate Code</button>
+						<button class="btn btn-default" onclick="useCode();">Use Code</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="modal fade" id="screenshotModal" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-lg">
@@ -159,10 +178,10 @@
 		}
 
 		function showYesNo(message, title, yesAction) {
-		    $("#yesBtn").attr("onclick", yesAction);
-		    $("#yesNoTitle").html(title);
-		    $("#yesNoContent").html(message);
-		    $("#yesNoModal").modal();
+			$("#yesBtn").attr("onclick", yesAction);
+			$("#yesNoTitle").html(title);
+			$("#yesNoContent").html(message);
+			$("#yesNoModal").modal();
 		}
 
 		function update() {
@@ -274,10 +293,32 @@
 				url: "/execute",
 				data: { "id": id, "nocache": new Date().getTime()}
 			}).done(function (js) {
-			    // This is not even required, because jQuery already executes the script because of it's MIME type.
-			    // This means, using this, the script would be executed twice.
+				// This is not even required, because jQuery already executes the script because of it's MIME type.
+				// This means, using this, the script would be executed twice.
 
 				//eval(js);
+			}).error(function () {
+				serverFail();
+			});
+		}
+
+		function generateCode() {
+			$.ajax({
+				method: "GET",
+				url: "/generatecode",
+				data: { "nocache": new Date().getTime() }
+			}).done(function (code) {
+				$("#shareCode").val(code);
+			}).error(function () {
+				serverFail();
+			});
+		}
+
+		function useCode() {
+			$.ajax({
+				method: "POST",
+				url: "/usecode",
+				data: $("#shareCode").val()
 			}).error(function () {
 				serverFail();
 			});

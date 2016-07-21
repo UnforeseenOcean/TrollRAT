@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using TrollRAT.Utils;
 
@@ -9,6 +11,16 @@ namespace TrollRAT.Payloads
     {
         public abstract void writeHTML(StringBuilder builder);
         public abstract void readData(string str);
+
+        public virtual void writeToStream(BinaryWriter writer)
+        {
+            //writer.Write(id);
+        }
+
+        public virtual void readFromStream(BinaryReader reader)
+        {
+            //id = reader.ReadInt32();
+        }
     }
 
     public abstract class PayloadSetting<t> : PayloadSetting
@@ -32,6 +44,46 @@ namespace TrollRAT.Payloads
         public virtual bool isValid(t v)
         {
             return true;
+        }
+
+        public virtual void writeValueToStream(BinaryWriter writer)
+        {
+            foreach (MethodInfo method in writer.GetType().GetMethods())
+            {
+                if (method.Name == "Write" && method.GetParameters()[0].ParameterType == typeof(t))
+                {
+                    method.Invoke(writer, new object[] { value });
+                    return;
+                }
+            }
+
+            throw new NotImplementedException("The value type is not suported by BinaryWriter. Please override the writeValueToStream method.");
+        }
+
+        public virtual void readValueFromStream(BinaryReader reader)
+        {
+            foreach (MethodInfo method in reader.GetType().GetMethods())
+            {
+                if (method.Name.StartsWith("Read") && method.Name != "Read" && method.ReturnType == typeof(t))
+                {
+                    Value = (t)method.Invoke(reader, new object[0]);
+                    return;
+                }
+            }
+
+            throw new NotImplementedException("The value type is not suported by BinaryReader. Please override the readValueFromStream method.");
+        }
+
+        public override void writeToStream(BinaryWriter writer)
+        {
+            base.writeToStream(writer);
+            writeValueToStream(writer);
+        }
+
+        public override void readFromStream(BinaryReader reader)
+        {
+            base.readFromStream(reader);
+            readValueFromStream(reader);
         }
     }
 

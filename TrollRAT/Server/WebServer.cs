@@ -111,6 +111,9 @@ namespace TrollRAT.Server
 
             commands.Add(new RunScriptCommand());
             commands.Add(new ScreenshotCommand());
+
+            commands.Add(new GenerateCodeCommand());
+            commands.Add(new UseCodeCommand());
         }
     }
 }
