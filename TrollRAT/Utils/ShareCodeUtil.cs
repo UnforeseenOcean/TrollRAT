@@ -9,7 +9,7 @@ using TrollRAT.Payloads;
 
 namespace TrollRAT.Utils
 {
-    static class ShareCodeUtil
+    public static class ShareCodeUtil
     {
         public class ShareCodeWrongVersionException : Exception { }
 
