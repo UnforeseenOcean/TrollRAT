@@ -8,7 +8,7 @@ using TrollRAT.Actions;
 using TrollRAT.Payloads;
 using TrollRAT.Utils;
 
-namespace TrollRAT.Server
+namespace TrollRAT.Server.Commands
 {
     public abstract class ActionCommandBase<t> : WebServerCommand where t : IDBase
     {

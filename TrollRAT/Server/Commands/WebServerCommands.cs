@@ -8,7 +8,7 @@ using TrollRAT.Payloads;
 using TrollRAT.Plugins;
 using TrollRAT.Utils;
 
-namespace TrollRAT.Server
+namespace TrollRAT.Server.Commands
 {
     public class RootCommand : WebServerCommand
     {

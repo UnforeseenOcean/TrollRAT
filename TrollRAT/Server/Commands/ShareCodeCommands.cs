@@ -4,7 +4,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using TrollRAT.Utils;
 
-namespace TrollRAT.Server
+namespace TrollRAT.Server.Commands
 {
     public class GenerateCodeCommand : WebServerCommandBase
     {

@@ -6,7 +6,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace TrollRAT.Server
+namespace TrollRAT.Server.Commands
 {
     public class ScreenshotCommand : WebServerCommandBase
     {

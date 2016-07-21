@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TrollRAT.Server
+namespace TrollRAT.Server.Commands
 {
     public class RunScriptCommand : WebServerCommandBase
     {

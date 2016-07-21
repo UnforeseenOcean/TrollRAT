@@ -6,7 +6,7 @@ using System.Web;
 
 using TrollRAT.Payloads;
 
-namespace TrollRAT.Server
+namespace TrollRAT.Server.Commands
 {
     public abstract class DetailCommandBase : WebServerCommand
     {

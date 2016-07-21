@@ -10,6 +10,7 @@ using TrollRAT.Utils;
 using TrollRAT.Actions;
 using TrollRAT.Server.Injections;
 using System.Reflection;
+using TrollRAT.Server.Commands;
 
 namespace TrollRAT.Server
 {
