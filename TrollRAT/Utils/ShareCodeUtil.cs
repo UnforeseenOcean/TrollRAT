@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using TrollRAT.Actions;
 using TrollRAT.Payloads;
+using TrollRAT.Plugins;
 
 namespace TrollRAT.Utils
 {
@@ -44,21 +45,41 @@ namespace TrollRAT.Utils
             }
         }
 
-        public static byte[] getPluginsHash()
+        public static byte[] getInstanceHash()
         {
             using (var md5 = MD5.Create())
             using (var stream = new MemoryStream())
             using (var writer = new BinaryWriter(stream))
             {
-                foreach (Assembly assembly in TrollRAT.pluginManager
-                    .plugins.OrderBy(p => p.Name).Select(p => Assembly.GetAssembly(p.GetType()))
-                    .Concat(new[] { Assembly.GetExecutingAssembly() }))
+                foreach (GlobalActionServer action in TrollRAT.Server.Actions.Where(a => a is GlobalActionServer))
                 {
-                    using (var fstream = File.OpenRead(assembly.Location))
+                    writer.Write(action.ID);
+                    writer.Write(action.GetType().FullName);
+                }
+
+                foreach (Payload payload in TrollRAT.Server.Payloads)
+                {
+                    writer.Write(payload.Name);
+                    writer.Write(payload.GetType().FullName);
+
+                    foreach (PayloadSetting setting in payload.Settings)
                     {
-                        byte[] hash = md5.ComputeHash(fstream);
-                        writer.Write(hash);
+                        writer.Write(setting.ID);
+
+                        Type settingType = setting.GetType();
+                        writer.Write(settingType.FullName);
+
+                        if (settingType.IsSubclassOf(typeof(TitledPayloadSetting<>)))
+                        {
+                            writer.Write((string)settingType.GetProperty("Title").GetValue(setting, null));
+                        }
                     }
+                }
+
+                foreach (ITrollRATPlugin plugin in TrollRAT.pluginManager.plugins.OrderBy(p => p.Name))
+                {
+                    writer.Write(plugin.Name);
+                    writer.Write(plugin.GetType().FullName);
                 }
 
                 return md5.ComputeHash(stream.ToArray());
@@ -77,7 +98,7 @@ namespace TrollRAT.Utils
                 using (var stream = new DeflateStream(memstream, CompressionMode.Decompress))
                 using (var reader = new BinaryReader(stream))
                 {
-                    byte[] pluginsHash = getPluginsHash();
+                    byte[] pluginsHash = getInstanceHash();
                     if (!reader.ReadBytes(pluginsHash.Length).SequenceEqual(pluginsHash))
                         throw new ShareCodeWrongVersionException();
 
@@ -101,7 +122,7 @@ namespace TrollRAT.Utils
                 using (var stream = new DeflateStream(memstream, CompressionMode.Compress))
                 using (var writer = new BinaryWriter(stream))
                 {
-                    writer.Write(getPluginsHash());
+                    writer.Write(getInstanceHash());
 
                     foreach (GlobalActionServer action in TrollRAT.Server.Actions.Where(a => a is GlobalActionServer))
                     {

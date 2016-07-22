@@ -140,9 +140,6 @@
     <EmbeddedResource Include="Web\JS\main.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Web\JS\yesno.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Web\HTML\screenshot.html" />
   </ItemGroup>
   <ItemGroup>
