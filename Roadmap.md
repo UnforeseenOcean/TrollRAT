@@ -9,13 +9,14 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
 	- [x] Sharing Code for presets
 	- [x] Panic function
 	- [x] Multi-User support (auto update)
-	- [ ] Upload support
+	- [x] Upload support
+		- [ ] Upload File Manager
 	- [x] Search function
  - API
 	- [x] Basic API for Payloads, Actions and Settings
 	- [x] Plugin support
 	- [ ] Support for random Payload Delays
-	- [ ] Plugins can provide their own JavaScript additions
+	- [x] Plugins can provide their own JavaScript additions
 	- [x] API for Global Actions (e.g. Screenshot and Run Script)
  - Coding
 	- [x] Split server commands into multiple classes

@@ -47,6 +47,17 @@ namespace TrollRAT.Actions
         }
     }
 
+    public class GlobalActionUploadManager : GlobalActionClient
+    {
+        public override string Title => "Uploads";
+        public override string OnClick => "$('#uploadModal').modal();";
+
+        public GlobalActionUploadManager(WebServer server) : base(server)
+        {
+            server.addInjection(InjectionPlaceholders.BODY, ResourceUtil.getResourceString("TrollRAT.Web.HTML.upload.html"));
+        }
+    }
+
     public class GlobalActionPausePayloads : GlobalActionServer
     {
         public override string Title => LoopingPayload.pausePayloads ? "Enable Payloads" : "Disable Payloads";

@@ -54,6 +54,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
@@ -68,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Actions\GlobalAction.cs" />
     <Compile Include="Actions\GlobalActions.cs" />
+    <Compile Include="Server\Commands\UploadCommand.cs" />
     <Compile Include="Server\Commands\ScreenshotCommand.cs" />
     <Compile Include="Server\Commands\ShareCodeCommands.cs" />
     <Compile Include="Server\Commands\ScriptingCommands.cs" />
@@ -153,6 +155,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Web\HTML\yesNo.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\HTML\upload.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
