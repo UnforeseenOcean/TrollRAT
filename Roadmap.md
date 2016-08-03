@@ -38,7 +38,9 @@ If I got new ideas, I will add them here. If you got a good idea, open an Issue 
 	- [ ] Shaking Windows
 	- [ ] Show/Hide Windows
 	- [x] Crash single Program
-	- [ ] Draw uploaded Images
+	- [x] Draw uploaded Images
+		- [ ] Draw to layered window
+		- [ ] VineMEMZ Drawing Effect
 	- [ ] Play uploaded Sounds
 	- [x] Text to Speech Output
 	- [ ] Multi-Monitor support for payloads

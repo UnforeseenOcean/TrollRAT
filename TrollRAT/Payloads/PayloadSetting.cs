@@ -25,6 +25,9 @@ namespace TrollRAT.Payloads
 
     public abstract class PayloadSetting<t> : PayloadSetting
     {
+        public delegate void PayloadSettingChangeEvent(object sender, t newValue);
+        public event PayloadSettingChangeEvent SettingChanged;
+
         protected t value;
         public t Value
         {
@@ -32,7 +35,10 @@ namespace TrollRAT.Payloads
             set
             {
                 if (isValid(value))
+                {
                     this.value = value;
+                    SettingChanged(this, value);
+                }
             }
         }
 
@@ -206,5 +212,30 @@ namespace TrollRAT.Payloads
         {
             this.options = options;
         }
+    }
+
+    public class PayloadSettingSelectFile : PayloadSettingSelectBase
+    {
+        protected string pattern, baseDirectory;
+
+        public PayloadSettingSelectFile(int defaultValue, string title, string baseDirectory, string pattern = null) : base(defaultValue, title)
+        {
+            this.pattern = pattern;
+            this.baseDirectory = baseDirectory;
+        }
+
+        public override string[] Options
+        {
+            get
+            {
+                if (pattern == null)
+                    return Directory.GetFiles(baseDirectory);
+                else
+                    return Directory.GetFiles(baseDirectory, pattern);
+            }
+            set { throw new NotSupportedException(); }
+        }
+
+        public string selectedFilePath => Path.Combine(baseDirectory, ValueText);
     }
 }

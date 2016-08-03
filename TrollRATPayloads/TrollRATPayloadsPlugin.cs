@@ -33,6 +33,7 @@ namespace TrollRATPayloads
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadMeltingScreen());
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadTrain());
             TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadDrawPixels());
+            TrollRAT.TrollRAT.Server.Payloads.Add(new PayloadDrawImages());
         }
     }
 }

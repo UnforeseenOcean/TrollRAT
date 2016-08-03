@@ -10,7 +10,7 @@ namespace TrollRAT.Server.Commands
     public class UploadCommand : WebServerCommandBase
     {
         public override Regex Path => new Regex("^/upload$");
-        private string uploadDir = "Upload";
+        public static readonly string uploadDir = System.IO.Path.GetFullPath("Upload");
 
         public string UploadDir
         {

