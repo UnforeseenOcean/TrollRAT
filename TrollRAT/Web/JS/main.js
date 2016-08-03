@@ -49,6 +49,7 @@ function onPayloadSelected(obj) {
     if (block)
         return;
 
+    blockUpdate = true;
     $("#status").html("Loading Payload Data...");
     active = payloadData["payload"] = $("#payloads").children().index($(obj));
 
@@ -60,6 +61,7 @@ function onPayloadSelected(obj) {
         actionsRequest, settingsRequest
     ], 0, function () {
         $(obj).addClass("active");
+        blockUpdate = false;
     });
 }
 
