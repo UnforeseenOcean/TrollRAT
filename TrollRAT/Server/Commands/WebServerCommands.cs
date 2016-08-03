@@ -87,7 +87,7 @@ namespace TrollRAT.Server.Commands
             StringBuilder content = new StringBuilder();
             foreach (GlobalAction action in server.Actions)
             {
-                content.Append(action.getHTML() + "\n");
+                content.Append(action.getHTML(null) + "\n");
             }
 
             string response = content.ToString();

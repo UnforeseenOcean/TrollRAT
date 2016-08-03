@@ -104,6 +104,9 @@ namespace TrollRAT.Server
         protected List<GlobalAction> actions = new List<GlobalAction>();
         public List<GlobalAction> Actions => actions;
 
+        protected GlobalActionDropdown mainDropdown;
+        public GlobalActionDropdown MainDropdown => mainDropdown;
+
         internal Dictionary<string, List<string>> injections = new Dictionary<string, List<string>>();
 
         public WebServer(int port) : base(port)
@@ -139,10 +142,14 @@ namespace TrollRAT.Server
             commands.Add(new UseCodeCommand());
 
             actions.Add(new GlobalActionPausePayloads(this));
-            actions.Add(new GlobalActionShareCodeManager(this));
-            actions.Add(new GlobalActionScreenshot(this));
-            actions.Add(new GlobalActionRunScript(this));
-            actions.Add(new GlobalActionUploadManager(this));
+
+            mainDropdown = new GlobalActionDropdown("Actions");
+            actions.Add(mainDropdown);
+
+            mainDropdown.Actions.Add(new GlobalActionShareCodeManager(this));
+            mainDropdown.Actions.Add(new GlobalActionScreenshot(this));
+            mainDropdown.Actions.Add(new GlobalActionRunScript(this));
+            mainDropdown.Actions.Add(new GlobalActionUploadManager(this));
         }
 
         private void initInjections()
