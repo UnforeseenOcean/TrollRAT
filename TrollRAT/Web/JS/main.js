@@ -25,6 +25,8 @@ function update() {
 
     blockUpdate = true;
 
+    var scrollY = $(document).scrollTop();
+
     $("#status").html("Updating...");
     active = payloadData["payload"] = $("#payloads").children().index($("#payloads .active"));
 
@@ -37,7 +39,10 @@ function update() {
     if ($("#settings").find($(":focus")).size() == 0)
         l.push(settingsRequest);
 
-    loadContent(l, 0, function () { blockUpdate = false });
+    loadContent(l, 0, function () {
+        blockUpdate = false;
+        $(document).scrollTop(scrollY);
+    });
 }
 
 function onPayloadSelected(obj) {
@@ -68,20 +73,31 @@ function loadContent(l, i, done) {
         data: obj.data
     }).done(function (response) {
         if (!obj.checkOld || response != obj.old) {
-            $(obj.out).html(response);
+            $(obj.out).html(response).promise().done(function () {
+                if (obj.hasOwnProperty("done"))
+                    obj.done();
+
+                if (i < l.length)
+                    loadContent(l, i, done);
+                else {
+                    if (typeof done !== "undefined")
+                        done();
+
+                    $("#status").html("Ready");
+                }
+            });
+
             obj.old = response;
+        } else {
+            if (i < l.length)
+                loadContent(l, i, done);
+            else {
+                if (typeof done !== "undefined")
+                    done();
+
+                $("#status").html("Ready");
+            }
         }
-
-        if (obj.hasOwnProperty("done"))
-            obj.done();
-
-        if (typeof done !== "undefined")
-            done();
-
-        if (i < l.length)
-            loadContent(l, i);
-        else
-            $("#status").html("Ready");
     }).error(function () {
         serverFail();
     });

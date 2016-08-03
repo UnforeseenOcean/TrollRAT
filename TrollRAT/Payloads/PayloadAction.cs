@@ -40,8 +40,8 @@ namespace TrollRAT.Payloads
             if (Icon == null)
                 return null;
 
-            return String.Format("<button type=\"button\" onclick=\"{0}\" class=\"btn btn-{2} btn-xs\">" +
-                "<span class=\"glyphicon glyphicon-{1}\" aria-hidden=\"true\"></span></button> ",
+            return String.Format("<span onclick=\"{0}\" class=\"btn btn-{2} btn-xs\">" +
+                "<span class=\"glyphicon glyphicon-{1}\" aria-hidden=\"true\"></span></span> ",
                 getExecuteJavascript(), Icon, Color);
         }
 

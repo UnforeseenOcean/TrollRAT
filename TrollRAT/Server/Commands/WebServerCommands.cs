@@ -51,7 +51,7 @@ namespace TrollRAT.Server.Commands
             StringBuilder content = new StringBuilder();
             foreach (Payload payload in server.Payloads)
             {
-                content.Append("<a href=\"#\" onclick=\"onPayloadSelected(this);\" class=\"list-group-item clearfix\">");
+                content.Append("<a href=\"javascript:void(0);\" onclick=\"onPayloadSelected(this);\" class=\"list-group-item clearfix\">");
                 content.Append(payload.Name);
                 content.Append("<span class=\"pull-right\">");
 
