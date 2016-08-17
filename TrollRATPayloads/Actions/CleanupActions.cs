@@ -1,24 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Runtime.InteropServices;
-
-using TrollRAT;
-using TrollRAT.Plugins;
 using TrollRAT.Payloads;
+using TrollRATPayloads.Utils;
 
-namespace TrollRATActions
+namespace TrollRATPayloads.Actions
 {
-    [Export(typeof(ITrollRATPlugin))]
-    public class TrollRATPayloadsPlugin : ITrollRATPlugin
-    {
-        public string Name => "TrollRAT Actions";
-
-        public void onLoad()
-        {
-            
-        }
-    }
-
     public class PayloadActionClearScreen : SimplePayloadAction
     {
         public PayloadActionClearScreen(Payload payload) : base(payload) { }
@@ -29,6 +15,10 @@ namespace TrollRATActions
         public override string execute()
         {
             RedrawWindow(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 133);
+
+            OverlayWindow.OverlayGrahpics.Clear(System.Drawing.Color.Transparent);
+            OverlayWindow.updateOverlay();
+
             return "void(0);";
         }
 
@@ -40,7 +30,7 @@ namespace TrollRATActions
     {
         public PayloadActionClearWindows(Payload payload) : base(payload) { }
 
-        [DllImport("..\\TrollRATPayloads\\TrollRATNative.dll")]
+        [DllImport("TrollRATNative.dll")]
         static extern void clearWindows();
 
         public override string execute()
@@ -52,5 +42,4 @@ namespace TrollRATActions
         public override string Icon => null;
         public override string Title => "Close open Windows";
     }
-
 }

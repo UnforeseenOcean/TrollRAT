@@ -27,6 +27,9 @@
     <ClCompile Include="errors.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="overlay.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Payloads.h">
@@ -42,6 +45,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Errors.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlay.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

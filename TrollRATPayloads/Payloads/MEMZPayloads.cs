@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using TrollRAT.Payloads;
-using TrollRATActions;
+using TrollRATPayloads.Actions;
 
 namespace TrollRATPayloads.Payloads
 {

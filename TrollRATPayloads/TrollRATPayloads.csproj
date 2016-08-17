@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\CleanupActions.cs" />
+    <Compile Include="Utils\OverlayWindow.cs" />
     <Compile Include="Payloads\CrasherPayload.cs" />
     <Compile Include="Payloads\MEMZPayloads.cs" />
     <Compile Include="Payloads\NewPayloads.cs" />
@@ -53,11 +55,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TrollRATActions\TrollRATActions.csproj">
-      <Project>{9bf0213e-2757-4898-8c94-42f1e464c468}</Project>
-      <Name>TrollRATActions</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\TrollRAT\TrollRAT.csproj">
       <Project>{646733a7-d07d-48d2-b064-edcadd6dee1f}</Project>
       <Name>TrollRAT</Name>

