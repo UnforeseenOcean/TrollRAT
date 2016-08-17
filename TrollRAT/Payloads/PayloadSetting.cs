@@ -228,10 +228,15 @@ namespace TrollRAT.Payloads
         {
             get
             {
-                if (pattern == null)
-                    return Directory.GetFiles(baseDirectory);
-                else
-                    return Directory.GetFiles(baseDirectory, pattern);
+                try
+                {
+                    if (pattern == null)
+                        return Directory.GetFiles(baseDirectory);
+                    else
+                        return Directory.GetFiles(baseDirectory, pattern);
+                } catch (Exception) {
+                    return new string[0];
+                }
             }
             set { throw new NotSupportedException(); }
         }
